@@ -10,7 +10,7 @@ public class ArrayType extends Type {
     private Type elemType; // The type of the array elements
 
     /**
-     * Constructor
+     * Construct an array type with the given length and element type
      * @param length The length of the array
      * @param elemType The type of the array's elements
      */

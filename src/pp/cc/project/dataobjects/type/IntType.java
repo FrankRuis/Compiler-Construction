@@ -7,7 +7,7 @@ package pp.cc.project.dataobjects.type;
  */
 public class IntType extends Type {
     /**
-     * Constructor
+     * Construct an int type
      */
     public IntType() {
         super(TypeKind.INT);

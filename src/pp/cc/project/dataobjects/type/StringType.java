@@ -9,7 +9,7 @@ public class StringType extends Type {
     private int length;
 
     /**
-     * Constructor
+     * Construct a string type with the given length
      * @param length The length of the string
      */
     public StringType(int length) {

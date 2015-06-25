@@ -17,7 +17,7 @@ public class Scope {
     private final Map<String, Integer> offsets; // Map of declared variables and their offset in the current scope
 
     /**
-     * Constructor
+     * Constructs an empty scope
      */
     public Scope() {
         this.types = new LinkedHashMap<>();

@@ -8,7 +8,7 @@ package pp.cc.project.dataobjects.type;
 public class NoneType extends Type {
 
     /**
-     * Constructor
+     * Construct a none type
      */
     public NoneType() {
         super(TypeKind.NONE);

@@ -9,7 +9,7 @@ public abstract class Type {
     private TypeKind kind;
 
     /**
-     * Constructor
+     * Construct a type with the given kind
      * @param kind The type's {@link TypeKind}
      */
     public Type(TypeKind kind) {

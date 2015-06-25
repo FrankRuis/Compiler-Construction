@@ -11,7 +11,7 @@ import java.util.LinkedList;
  */
 public class Scopes extends LinkedList<Scope> {
     /**
-     * Constructor
+     * Constructs a list of scopes containing the outer scope
      */
     public Scopes() {
         super();

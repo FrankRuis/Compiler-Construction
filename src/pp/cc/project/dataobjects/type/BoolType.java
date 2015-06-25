@@ -7,7 +7,7 @@ package pp.cc.project.dataobjects.type;
  */
 public class BoolType extends Type {
     /**
-     * Constructor
+     * Construct a boolean type
      */
     public BoolType() {
         super(TypeKind.BOOL);
