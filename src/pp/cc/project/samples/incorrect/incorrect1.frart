@@ -1,0 +1,7 @@
+Int x = 0;
+int y = 7;
+
+while (y > 0) {
+    x = x + 1;
+    y = y - 1;
+}

@@ -1,0 +1,11 @@
+// Regular comment
+int x = 0;
+int y = 7;
+
+/*
+Block comment
+*/
+while (y > 0) {
+    x = x + 1;
+    y = y - 1;
+}
