@@ -18,6 +18,7 @@ public class TestScopes {
     @Test
     public void testScopes() {
         Scopes scopes = new Scopes();
+        assert(scopes.size() == 1);
 
         // Add 'a' to the current scope as an Integer
         scopes.put("a", new IntType());
