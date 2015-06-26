@@ -25,6 +25,11 @@ public class StringType extends Type {
     }
 
     @Override
+    public boolean equals(Object o) {
+        return (o instanceof StringType);
+    }
+
+    @Override
     public String toString() {
         return "String";
     }

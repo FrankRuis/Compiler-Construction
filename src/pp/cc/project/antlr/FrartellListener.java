@@ -43,18 +43,6 @@ public interface FrartellListener extends ParseTreeListener {
 	 */
 	void exitIfStat(@NotNull FrartellParser.IfStatContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ternStat}
-	 * labeled alternative in {@link FrartellParser#stat}.
-	 * @param ctx the parse tree
-	 */
-	void enterTernStat(@NotNull FrartellParser.TernStatContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ternStat}
-	 * labeled alternative in {@link FrartellParser#stat}.
-	 * @param ctx the parse tree
-	 */
-	void exitTernStat(@NotNull FrartellParser.TernStatContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code whileStat}
 	 * labeled alternative in {@link FrartellParser#stat}.
 	 * @param ctx the parse tree
@@ -90,6 +78,54 @@ public interface FrartellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReturnStat(@NotNull FrartellParser.ReturnStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code arrayExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code arrayExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code atomExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAtomExpr(@NotNull FrartellParser.AtomExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code atomExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAtomExpr(@NotNull FrartellParser.AtomExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code funcCallExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterFuncCallExpr(@NotNull FrartellParser.FuncCallExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code funcCallExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitFuncCallExpr(@NotNull FrartellParser.FuncCallExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code multExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultExpr(@NotNull FrartellParser.MultExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code multExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultExpr(@NotNull FrartellParser.MultExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code indexExpr}
 	 * labeled alternative in {@link FrartellParser#expr}.
@@ -139,18 +175,6 @@ public interface FrartellListener extends ParseTreeListener {
 	 */
 	void exitUnaryMinExpr(@NotNull FrartellParser.UnaryMinExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code arrayExpr}
-	 * labeled alternative in {@link FrartellParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code arrayExpr}
-	 * labeled alternative in {@link FrartellParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code addExpr}
 	 * labeled alternative in {@link FrartellParser#expr}.
 	 * @param ctx the parse tree
@@ -163,6 +187,18 @@ public interface FrartellListener extends ParseTreeListener {
 	 */
 	void exitAddExpr(@NotNull FrartellParser.AddExprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ternExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterTernExpr(@NotNull FrartellParser.TernExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ternExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitTernExpr(@NotNull FrartellParser.TernExprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code compExpr}
 	 * labeled alternative in {@link FrartellParser#expr}.
 	 * @param ctx the parse tree
@@ -174,30 +210,6 @@ public interface FrartellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCompExpr(@NotNull FrartellParser.CompExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code atomExpr}
-	 * labeled alternative in {@link FrartellParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterAtomExpr(@NotNull FrartellParser.AtomExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code atomExpr}
-	 * labeled alternative in {@link FrartellParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitAtomExpr(@NotNull FrartellParser.AtomExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code funcCalltExpr}
-	 * labeled alternative in {@link FrartellParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterFuncCalltExpr(@NotNull FrartellParser.FuncCalltExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code funcCalltExpr}
-	 * labeled alternative in {@link FrartellParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitFuncCalltExpr(@NotNull FrartellParser.FuncCalltExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code powExpr}
 	 * labeled alternative in {@link FrartellParser#expr}.
@@ -222,18 +234,6 @@ public interface FrartellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolExpr(@NotNull FrartellParser.BoolExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code multExpr}
-	 * labeled alternative in {@link FrartellParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterMultExpr(@NotNull FrartellParser.MultExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code multExpr}
-	 * labeled alternative in {@link FrartellParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitMultExpr(@NotNull FrartellParser.MultExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code idTarget}
 	 * labeled alternative in {@link FrartellParser#target}.

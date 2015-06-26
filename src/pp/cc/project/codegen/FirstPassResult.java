@@ -10,9 +10,7 @@ import pp.cc.project.dataobjects.type.Type;
  */
 public class FirstPassResult {
     private final ParseTreeProperty<ParserRuleContext> entries = new ParseTreeProperty<>();
-
     private final ParseTreeProperty<Type> types = new ParseTreeProperty<>();
-
     private final ParseTreeProperty<Integer> offsets = new ParseTreeProperty<>();
 
     public void setEntry(ParseTree node, ParserRuleContext entry) {

@@ -11,7 +11,6 @@ program
 stat
  : target ASSIGN expr SEMCOL                        #assignStat
  | IF OPAR expr CPAR block (ELSE block)?            #ifStat
- | <assoc=right> expr QMARK expr COLON expr SEMCOL  #ternStat
  | WHILE OPAR expr CPAR block                       #whileStat
  | ID args SEMCOL                                   #funcCalltStat
  | RETURN expr SEMCOL                               #returnStat
@@ -19,18 +18,19 @@ stat
 
 /** Expression **/
 expr
- : MINUS expr                             #unaryMinExpr
- | NOT expr                               #notExpr
- | ID args                                #funcCalltExpr
- | expr op=(MULT | DIV | MOD) expr        #multExpr
- | expr POW expr                          #powExpr
- | expr op=(PLUS | MINUS) expr            #addExpr
- | expr op=(EQ | NEQ) expr                #eqExpr
- | expr op=(LW | GR | GREQ | LWEQ) expr   #compExpr
- | expr op=(AND | OR) expr                #boolExpr
- | ID OSQ expr CSQ                        #indexExpr
- | OSQ (expr (COMMA expr)*)? CSQ          #arrayExpr
- | atom                                   #atomExpr
+ : MINUS expr                                       #unaryMinExpr
+ | NOT expr                                         #notExpr
+ | <assoc=right> expr QMARK expr COLON expr         #ternExpr
+ | ID args                                          #funcCallExpr
+ | expr op=(MULT | DIV | MOD) expr                  #multExpr
+ | expr POW expr                                    #powExpr
+ | expr op=(PLUS | MINUS) expr                      #addExpr
+ | expr op=(EQ | NEQ) expr                          #eqExpr
+ | expr op=(LW | GR | GREQ | LWEQ) expr             #compExpr
+ | expr op=(AND | OR) expr                          #boolExpr
+ | ID OSQ expr CSQ                                  #indexExpr
+ | OSQ (expr (COMMA expr)*)? CSQ                    #arrayExpr
+ | atom                                             #atomExpr
  ;
 
 /** Assignment target **/

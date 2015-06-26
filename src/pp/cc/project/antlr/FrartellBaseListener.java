@@ -53,18 +53,6 @@ public class FrartellBaseListener implements FrartellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTernStat(@NotNull FrartellParser.TernStatContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTernStat(@NotNull FrartellParser.TernStatContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterWhileStat(@NotNull FrartellParser.WhileStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -96,6 +84,54 @@ public class FrartellBaseListener implements FrartellListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitReturnStat(@NotNull FrartellParser.ReturnStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAtomExpr(@NotNull FrartellParser.AtomExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAtomExpr(@NotNull FrartellParser.AtomExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFuncCallExpr(@NotNull FrartellParser.FuncCallExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFuncCallExpr(@NotNull FrartellParser.FuncCallExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMultExpr(@NotNull FrartellParser.MultExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultExpr(@NotNull FrartellParser.MultExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -149,18 +185,6 @@ public class FrartellBaseListener implements FrartellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterAddExpr(@NotNull FrartellParser.AddExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -173,6 +197,18 @@ public class FrartellBaseListener implements FrartellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTernExpr(@NotNull FrartellParser.TernExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTernExpr(@NotNull FrartellParser.TernExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCompExpr(@NotNull FrartellParser.CompExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -180,30 +216,6 @@ public class FrartellBaseListener implements FrartellListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCompExpr(@NotNull FrartellParser.CompExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAtomExpr(@NotNull FrartellParser.AtomExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAtomExpr(@NotNull FrartellParser.AtomExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFuncCalltExpr(@NotNull FrartellParser.FuncCalltExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFuncCalltExpr(@NotNull FrartellParser.FuncCalltExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -228,18 +240,6 @@ public class FrartellBaseListener implements FrartellListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolExpr(@NotNull FrartellParser.BoolExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMultExpr(@NotNull FrartellParser.MultExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMultExpr(@NotNull FrartellParser.MultExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

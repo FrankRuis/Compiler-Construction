@@ -32,13 +32,6 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIfStat(@NotNull FrartellParser.IfStatContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ternStat}
-	 * labeled alternative in {@link FrartellParser#stat}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTernStat(@NotNull FrartellParser.TernStatContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code whileStat}
 	 * labeled alternative in {@link FrartellParser#stat}.
 	 * @param ctx the parse tree
@@ -59,6 +52,34 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitReturnStat(@NotNull FrartellParser.ReturnStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code arrayExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code atomExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAtomExpr(@NotNull FrartellParser.AtomExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code funcCallExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFuncCallExpr(@NotNull FrartellParser.FuncCallExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code multExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultExpr(@NotNull FrartellParser.MultExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code indexExpr}
 	 * labeled alternative in {@link FrartellParser#expr}.
@@ -88,13 +109,6 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUnaryMinExpr(@NotNull FrartellParser.UnaryMinExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code arrayExpr}
-	 * labeled alternative in {@link FrartellParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code addExpr}
 	 * labeled alternative in {@link FrartellParser#expr}.
 	 * @param ctx the parse tree
@@ -102,26 +116,19 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAddExpr(@NotNull FrartellParser.AddExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ternExpr}
+	 * labeled alternative in {@link FrartellParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTernExpr(@NotNull FrartellParser.TernExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code compExpr}
 	 * labeled alternative in {@link FrartellParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitCompExpr(@NotNull FrartellParser.CompExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code atomExpr}
-	 * labeled alternative in {@link FrartellParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAtomExpr(@NotNull FrartellParser.AtomExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code funcCalltExpr}
-	 * labeled alternative in {@link FrartellParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFuncCalltExpr(@NotNull FrartellParser.FuncCalltExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code powExpr}
 	 * labeled alternative in {@link FrartellParser#expr}.
@@ -136,13 +143,6 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBoolExpr(@NotNull FrartellParser.BoolExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code multExpr}
-	 * labeled alternative in {@link FrartellParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMultExpr(@NotNull FrartellParser.MultExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code idTarget}
 	 * labeled alternative in {@link FrartellParser#target}.

@@ -20,6 +20,10 @@ public class ArrayType extends Type {
         this.elemType = elemType;
     }
 
+    public Type getElemType() {
+        return this.elemType;
+    }
+
     /**
      * @return This type's size in bytes
      */

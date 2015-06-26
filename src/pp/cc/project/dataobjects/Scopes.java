@@ -64,7 +64,7 @@ public class Scopes extends LinkedList<Scope> {
     /**
      * Get the type of a variable with the given id
      * @param id The variable's id
-     * @return The type of the variable
+     * @return The type of the variable or NoneType if it does not exist
      */
     public Type getType(String id) {
         return this.stream().filter(scope -> scope.contains(id))
@@ -74,7 +74,7 @@ public class Scopes extends LinkedList<Scope> {
     /**
      * Get the offset of the variable with the given id in the current scope
      * @param id The variable's id
-     * @return The offset of the variable in the current scope
+     * @return The offset of the variable in the current scope or -1 if it does not exist
      */
     public int getOffset(String id) {
         return this.stream().filter(scope -> scope.contains(id))

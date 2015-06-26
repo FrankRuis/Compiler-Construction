@@ -6,6 +6,9 @@ package pp.cc.project.dataobjects.type;
  * Frartell data type
  */
 public abstract class Type {
+    public static final Type INT = new IntType();
+    public static final Type BOOL = new BoolType();
+
     private TypeKind kind;
 
     /**

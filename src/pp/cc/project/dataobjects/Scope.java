@@ -66,6 +66,6 @@ public class Scope {
      * @return The offset of the variable in the current scope
      */
     public Integer getOffset(String id) {
-        return this.offsets.get(id);
+        return this.offsets.get(id) != null ? this.offsets.get(id) : -1;
     }
 }
