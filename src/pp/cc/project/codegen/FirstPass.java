@@ -85,6 +85,7 @@ public class FirstPass extends FrartellBaseListener {
             addError(ctx, "Tried declaring '%s' multiple times.", id);
         }
 
+        setOffset(ctx, this.scopes.getOffset(id));
         setType(ctx, type);
         setType(ctx.ID(), arrayType);
         setEntry(ctx, ctx);
@@ -99,6 +100,7 @@ public class FirstPass extends FrartellBaseListener {
             addError(ctx, "Tried declaring '%s' multiple times.", id);
         }
 
+        setOffset(ctx, this.scopes.getOffset(id));
         setType(ctx, type);
         setEntry(ctx, ctx);
     }
