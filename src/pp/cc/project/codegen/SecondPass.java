@@ -205,7 +205,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
             int jumpTarget = program.size() + 1;
 
             emitAt(branchPos, Instr.InvBranch, register,
-                    new Target(Target.Type.Abs, new Constant(jumpTarget)))
+                    new Target(Target.Type.Rel, new Constant(jumpTarget - branchPos)))
                     .setComment(String.format("jump to instruction %d if %s contains the False value",
                     jumpTarget,
                     register));
