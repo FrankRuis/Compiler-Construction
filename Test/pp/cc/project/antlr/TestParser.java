@@ -67,10 +67,8 @@ public class TestParser extends FrartellBaseListener {
             Files.walk(BASE_WRONG).filter(Files::isRegularFile).forEach(file -> {
                 errors = false;
 
-                // Read the contents of the file and convert it to a token stream
-                Lexer lexer = new FrartellLexer(new ANTLRInputStream(FileUtils.readFile(file.toFile())));
-                FrartellParser parser = new FrartellParser(new CommonTokenStream(lexer));
-                ParseTree parseTree = parser.program();
+                // Get the parse tree
+                ParseTree parseTree = ParseUtils.getParseTree(file.toFile());
 
                 // Walk the parse tree
                 new ParseTreeWalker().walk(this, parseTree);
