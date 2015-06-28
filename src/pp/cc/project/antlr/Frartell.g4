@@ -12,7 +12,7 @@ progname
  : PROGRAM ID SEMCOL
  ;
 
-/** Statement **/
+/** Statements **/
 stat
  : target ASSIGN expr SEMCOL                        #assignStat
  | IF OPAR expr CPAR block (ELSE block)?            #ifStat
@@ -21,7 +21,7 @@ stat
  | RETURN expr SEMCOL                               #returnStat
  ;
 
-/** Expression **/
+/** Expressions **/
 expr
  : MINUS expr                                       #unaryMinExpr
  | NOT expr                                         #notExpr
@@ -38,19 +38,20 @@ expr
  | atom                                             #atomExpr
  ;
 
+/** block **/
+block
+ : OBRACE (stat | decl)* CBRACE
+ ;
+
 /** Assignment target **/
 target
- : ID                #idTarget
- | ID OSQ expr CSQ   #arrayTarget
+ : ID                    #idTarget
+ | ID OSQ expr CSQ       #arrayTarget
  ;
 
 /** Declaration **/
 decl
  : type decltarget (ASSIGN expr)? SEMCOL
- ;
-
-declfunc
- : DEF ID pars block
  ;
 
 /** Declaration target **/
@@ -59,19 +60,19 @@ decltarget
  | ID OSQ INTEGER CSQ    #arrayDeclTarget
  ;
 
-/** block **/
-block
- : OBRACE (stat | decl)* CBRACE
- ;
-
-/** Arguments of a function call */
-args
- : OPAR (expr (COMMA expr)*)? CPAR
+/** Function declaration **/
+declfunc
+ : DEF ID pars block
  ;
 
 /** Parameters of a function declaration */
 pars
  : OPAR (type ID (COMMA type ID)*)? CPAR
+ ;
+
+/** Arguments of a function call */
+args
+ : OPAR (expr (COMMA expr)*)? CPAR
  ;
 
 /** Atomic value **/
