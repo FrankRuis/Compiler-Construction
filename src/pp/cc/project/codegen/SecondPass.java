@@ -179,6 +179,41 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     }
 
     @Override
+    public Instruction visitTernExpr(@NotNull FrartellParser.TernExprContext ctx) {
+        Instruction condExprResult = visit(ctx.expr(0));
+        // Set the position for the branch instruction to right after the if expression
+        int branchPos = program.size();
+        Register register = getReg(ctx.expr(0));
+        setReg(ctx, register);
+
+        // This register is no longer needed
+        register.setAvailable();
+
+        // Visit the expressions
+        visit(ctx.expr(1));
+        Instruction expr2Result = visit(ctx.expr(2));
+
+        // Get the instruction number of the second expression and add 2 for the instructions we will emit later
+        int jumpTarget = instrNum(expr2Result) + 2;
+
+        // Insert the branch instruction to the left of the  first expression
+        emitAt(branchPos, Instr.InvBranch, register,
+                new Target(Target.Type.Abs, new Constant(jumpTarget)))
+                .setComment(String.format("jump to instruction %d if %s contains the False value",
+                        jumpTarget,
+                        register));
+
+        // Get the current end of the program and add 1 for the jump instruction that we will emit later
+        jumpTarget = program.size() + 1;
+
+        // Insert the jump instruction to the left of the first else block instruction
+        emitAt(instrNum(expr2Result), Instr.Jump,
+                new Target(Target.Type.Abs, new Constant(jumpTarget)));
+
+        return condExprResult;
+    }
+
+    @Override
     public Instruction visitAddExpr(@NotNull FrartellParser.AddExprContext ctx) {
         Instruction expr0Result = visit(ctx.expr(0));
         visit(ctx.expr(1));

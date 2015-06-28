@@ -25,19 +25,19 @@ stat
 
 /** Expressions **/
 expr
- : MINUS expr                                       #unaryMinExpr
- | NOT expr                                         #notExpr
- | <assoc=right> expr QMARK expr COLON expr         #ternExpr
- | ID args                                          #funcCallExpr
- | expr op=(MULT | DIV | MOD) expr                  #multExpr
- | expr POW expr                                    #powExpr
- | expr op=(PLUS | MINUS) expr                      #addExpr
- | expr op=(EQ | NEQ) expr                          #eqExpr
- | expr op=(LW | GR | GREQ | LWEQ) expr             #compExpr
- | expr op=(AND | OR) expr                          #boolExpr
- | ID OSQ expr CSQ                                  #indexExpr
- | OSQ (expr (COMMA expr)*)? CSQ                    #arrayExpr
- | atom                                             #atomExpr
+ : MINUS expr                                                 #unaryMinExpr
+ | NOT expr                                                   #notExpr
+ | OPAR expr CPAR QMARK OPAR expr CPAR COLON OPAR expr CPAR   #ternExpr
+ | ID args                                                    #funcCallExpr
+ | expr op=(MULT | DIV | MOD) expr                            #multExpr
+ | expr POW expr                                              #powExpr
+ | expr op=(PLUS | MINUS) expr                                #addExpr
+ | expr op=(EQ | NEQ) expr                                    #eqExpr
+ | expr op=(LW | GR | GREQ | LWEQ) expr                       #compExpr
+ | expr op=(AND | OR) expr                                    #boolExpr
+ | ID OSQ expr CSQ                                            #indexExpr
+ | OSQ (expr (COMMA expr)*)? CSQ                              #arrayExpr
+ | atom                                                       #atomExpr
  ;
 
 /** block **/
