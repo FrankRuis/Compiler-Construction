@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import pp.cc.project.antlr.FrartellBaseListener;
 import pp.cc.project.antlr.FrartellParser;
+import pp.cc.project.dataobjects.ParseException;
 import pp.cc.project.dataobjects.Scope;
 import pp.cc.project.dataobjects.Scopes;
 import pp.cc.project.dataobjects.type.ArrayType;
@@ -19,28 +20,33 @@ import java.util.List;
 
 /**
  * @author Frank
+ *
+ * First walk through the parse tree<br>
+ * Type checking and variable offset calculation
  */
 public class FirstPass extends FrartellBaseListener {
 
-    private FirstPassResult result;
-    private Scopes scopes;
-    private List<String> errors;
+    private FirstPassResult result; // Results of this first walk through the parse tree
+    private Scopes scopes; // Variable scopes used to calculate offsets and store types
+    private List<String> errors; // List containing parse errors
 
     /**
      * Walk the parse tree and perform type checking, stores the result of variable assignments in a {@link FirstPassResult}
      * @param tree The parse tree to walk
      * @return The result of the type checking phase
-     * @throws Exception //TODO exception
+     * @throws ParseException Thrown when an error occurs during parsing
      */
-    public FirstPassResult check(ParseTree tree) throws Exception {
+    public FirstPassResult check(ParseTree tree) throws ParseException {
         this.scopes = new Scopes();
         this.result = new FirstPassResult();
         this.errors = new ArrayList<>();
 
+        // Walk the parse tree
         new ParseTreeWalker().walk(this, tree);
 
+        // Throw a parse excpetion if error occurred
         if (!errors.isEmpty()) {
-            errors.forEach(System.err::println);
+            throw new ParseException(errors);
         }
 
         return this.result;
@@ -84,6 +90,7 @@ public class FirstPass extends FrartellBaseListener {
             addError(ctx, "Tried declaring '%s' multiple times.", id);
         }
 
+        // Set the variable offset
         setOffset(ctx, this.scopes.getOffset(id));
         setType(ctx, type);
         setType(ctx.ID(), arrayType);
@@ -95,10 +102,12 @@ public class FirstPass extends FrartellBaseListener {
         String id = ctx.ID().getText();
         Type type = getType(ctx.getParent().getChild(0));
 
+        // If we can not declare this variable
         if (!this.scopes.put(id, type)) {
             addError(ctx, "Tried declaring '%s' multiple times.", id);
         }
 
+        // Set the variable offset
         setOffset(ctx, this.scopes.getOffset(id));
         setType(ctx, type);
         setEntry(ctx, ctx);
@@ -111,6 +120,7 @@ public class FirstPass extends FrartellBaseListener {
             checkType(ctx.expr(), getType(getEntry(ctx.decltarget())));
         }
 
+        // Set the variable type
         setType(ctx, getType(ctx.expr()));
         setEntry(ctx, getEntry(ctx.decltarget()));
     }
@@ -120,8 +130,11 @@ public class FirstPass extends FrartellBaseListener {
         String id = ctx.ID().getText();
         Type type = this.scopes.getType(id);
 
+        // If the type is a NoneType it was not declared
         if (type instanceof NoneType) {
             addError(ctx, "Variable '%s' not declared", id);
+
+        // Else, set the type, offset and flow graph entry
         } else {
             setType(ctx, type);
             setOffset(ctx, this.scopes.getOffset(id));
@@ -134,12 +147,16 @@ public class FirstPass extends FrartellBaseListener {
         String id = ctx.ID().getText();
         Type type = this.scopes.getType(id);
 
+        // If this is an array
         if (type instanceof ArrayType) {
             Type elemType = ((ArrayType) type).getElemType();
 
+            // Set the type, offset and flow graph entry
             setType(ctx, elemType);
             setOffset(ctx, this.scopes.getOffset(id));
             setEntry(ctx, ctx);
+
+        // Add an error if it is not an array or if it was not declared
         } else {
             if (type instanceof NoneType) {
                 addError(ctx, "Variable '%s' not declared", id);
@@ -151,6 +168,7 @@ public class FirstPass extends FrartellBaseListener {
 
     @Override
     public void exitAtomExpr(@NotNull FrartellParser.AtomExprContext ctx) {
+        // Set the type and flow graph entry to that of the atom
         setType(ctx, getType(ctx.atom()));
         setEntry(ctx, getEntry(ctx.atom()));
     }
@@ -181,12 +199,14 @@ public class FirstPass extends FrartellBaseListener {
 
     @Override
     public void exitBoolAtom(@NotNull FrartellParser.BoolAtomContext ctx) {
+        // Set the type and flow graph entry
         setType(ctx, Type.BOOL);
         setEntry(ctx, ctx);
     }
 
     @Override
     public void exitIntAtom(@NotNull FrartellParser.IntAtomContext ctx) {
+        // Set the type and flow graph entry
         setType(ctx, Type.INT);
         setEntry(ctx, ctx);
     }
@@ -196,8 +216,11 @@ public class FirstPass extends FrartellBaseListener {
         String id = ctx.ID().getText();
         Type type = this.scopes.getType(id);
 
+        // If the type is a NoneType it was not declared
         if (type instanceof NoneType) {
             addError(ctx, "Variable '%s' is not declared.", id);
+
+        // Else, set the type, offset and flow graph entry
         } else {
             setType(ctx, type);
             setOffset(ctx, this.scopes.getOffset(id));
@@ -207,58 +230,78 @@ public class FirstPass extends FrartellBaseListener {
 
     @Override
     public void exitStringAtom(@NotNull FrartellParser.StringAtomContext ctx) {
+        // Set the type and flow graph entry
         setType(ctx, new StringType(ctx.getText().length() - 2));
         setEntry(ctx, ctx);
     }
 
     @Override
     public void exitParExprAtom(@NotNull FrartellParser.ParExprAtomContext ctx) {
+        // Set the type and flow graph entry to that of the expression between parentheses
         setType(ctx, getType(ctx.expr()));
         setEntry(ctx, getEntry(ctx.expr()));
     }
 
     @Override
     public void exitAddExpr(@NotNull FrartellParser.AddExprContext ctx) {
+        // Check if the addition is between two ints
         checkType(ctx.expr(0), Type.INT);
         checkType(ctx.expr(1), Type.INT);
+
+        // Set the type to int
         setType(ctx, Type.INT);
         setEntry(ctx, getEntry(ctx.expr(0)));
     }
 
     @Override
     public void exitMultExpr(@NotNull FrartellParser.MultExprContext ctx) {
+        // Check if the multiplication was between two ints
         checkType(ctx.expr(0), Type.INT);
         checkType(ctx.expr(1), Type.INT);
+
+        // Set the type to int
         setType(ctx, Type.INT);
         setEntry(ctx, getEntry(ctx.expr(0)));
     }
 
     @Override
     public void exitPowExpr(@NotNull FrartellParser.PowExprContext ctx) {
+        // Check if the exponentiation was between two ints
         checkType(ctx.expr(0), Type.INT);
         checkType(ctx.expr(1), Type.INT);
+
+        // Set the type to int
         setType(ctx, Type.INT);
         setEntry(ctx, getEntry(ctx.expr(0)));
     }
 
     @Override
     public void exitUnaryMinExpr(@NotNull FrartellParser.UnaryMinExprContext ctx) {
+        // Check if the target expression is an int
         checkType(ctx.expr(), Type.INT);
+
+        // Set the type to int
         setType(ctx, Type.INT);
         setEntry(ctx, getEntry(ctx.expr()));
     }
 
     @Override
     public void exitNotExpr(@NotNull FrartellParser.NotExprContext ctx) {
+        // Check if the target is a boolean
         checkType(ctx.expr(), Type.BOOL);
+
+        // Set the type to bool
         setType(ctx, Type.BOOL);
         setEntry(ctx, getEntry(ctx.expr()));
     }
 
     @Override
     public void exitTernExpr(@NotNull FrartellParser.TernExprContext ctx) {
+        // Check if the first expression is a boolean and the two remaining expressions are of the same type
         checkType(ctx.expr(0), Type.BOOL);
         checkType(ctx.expr(1), getType(ctx.expr(2)));
+
+        // Set the type to that of the second expression
         setType(ctx, getType(ctx.expr(1)));
         setEntry(ctx, getEntry(ctx.expr(0)));
     }
@@ -266,14 +309,20 @@ public class FirstPass extends FrartellBaseListener {
     @Override
     public void exitIndexExpr(@NotNull FrartellParser.IndexExprContext ctx) {
         String id = ctx.ID().getText();
+        // Get the type of the variable
         Type type = this.scopes.getType(id);
 
+        // If the type is an array
         if (type instanceof ArrayType) {
+            // Get the array element type
             Type elemType = ((ArrayType) type).getElemType();
 
+            // Set the type to that of the element type
             setType(ctx, elemType);
             setOffset(ctx, this.scopes.getOffset(id));
             setEntry(ctx, ctx);
+
+        // Else, add an error
         } else {
             if (type instanceof NoneType) {
                 addError(ctx, "Variable '%s' not declared", id);
@@ -293,6 +342,7 @@ public class FirstPass extends FrartellBaseListener {
 
     @Override
     public void exitCompExpr(@NotNull FrartellParser.CompExprContext ctx) {
+        // An array should not be compared
         if (getType(ctx.expr(0)) instanceof ArrayType) {
             addError(ctx, "Can not compare an array.");
         } else {
@@ -305,26 +355,32 @@ public class FirstPass extends FrartellBaseListener {
 
     @Override
     public void exitBoolExpr(@NotNull FrartellParser.BoolExprContext ctx) {
+        // Check if both expressions are of the type bool
         checkType(ctx.expr(0), Type.BOOL);
         checkType(ctx.expr(1), Type.BOOL);
+
+        // Set the type to bool
         setType(ctx, Type.BOOL);
         setEntry(ctx, getEntry(ctx.expr(0)));
     }
 
     @Override
     public void exitAssignStat(@NotNull FrartellParser.AssignStatContext ctx) {
+        // Check if the target and expression are of the same type
         checkType(ctx.target(), getType(ctx.expr()));
         setEntry(ctx, getEntry(ctx.expr()));
     }
 
     @Override
     public void exitIfStat(@NotNull FrartellParser.IfStatContext ctx) {
+        // Check if the if condition is a boolean
         checkType(ctx.expr(), Type.BOOL);
         setEntry(ctx, getEntry(ctx.expr()));
     }
 
     @Override
     public void exitWhileStat(@NotNull FrartellParser.WhileStatContext ctx) {
+        // Check if the while condition is a boolean
         checkType(ctx.expr(), Type.BOOL);
         setEntry(ctx, getEntry(ctx.expr()));
     }
