@@ -188,7 +188,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         Register register1 = getReg(ctx.expr(1));
         Register register2 = getReg(true, ctx);
 
-        // Emit an opcode based on the type of operator
+        // Emit an instruction based on the type of operator
         switch (ctx.op.getType()) {
             case FrartellParser.MINUS:
                 emit(Instr.Compute, operatorof(Operator.Type.Sub), register0, register1, register2);
@@ -208,6 +208,58 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     }
 
     @Override
+    public Instruction visitMultExpr(@NotNull FrartellParser.MultExprContext ctx) {
+        Instruction expr0Result = visit(ctx.expr(0));
+        visit(ctx.expr(1));
+
+        // Assign registers for the left expression, right expression and target
+        Register register0 = getReg(ctx.expr(0));
+        Register register1 = getReg(ctx.expr(1));
+        Register register2 = getReg(true, ctx);
+
+        // Emit an instruction based on the type of operator
+        switch (ctx.op.getType()) {
+            case FrartellParser.MOD:
+                emit(Instr.Compute, operatorof(Operator.Type.Mod), register0, register1, register2);
+                break;
+            case FrartellParser.MULT:
+                emit(Instr.Compute, operatorof(Operator.Type.Mul), register0, register1, register2);
+                break;
+            case FrartellParser.DIV:
+                emit(Instr.Compute, operatorof(Operator.Type.Div), register0, register1, register2);
+                break;
+            default:
+                throw new RuntimeException(String.format("Unknown operator in add expression: %s", ctx.op.getText()));
+        }
+
+        // These registers are no longer needed
+        register0.setAvailable();
+        register1.setAvailable();
+
+        return expr0Result;
+    }
+
+    @Override
+    public Instruction visitPowExpr(@NotNull FrartellParser.PowExprContext ctx) {
+        Instruction expr0Result = visit(ctx.expr(0));
+        visit(ctx.expr(1));
+
+        // Assign registers for the left expression, right expression and target
+        Register register0 = getReg(ctx.expr(0));
+        Register register1 = getReg(ctx.expr(1));
+        Register register2 = getReg(true, ctx);
+
+        // Emit a compute instruction with the power operator
+        emit(Instr.Compute, operatorof(Operator.Type.Pow), register0, register1, register2);
+
+        // These registers are no longer needed
+        register0.setAvailable();
+        register1.setAvailable();
+
+        return expr0Result;
+    }
+
+    @Override
     public Instruction visitBoolExpr(@NotNull FrartellParser.BoolExprContext ctx) {
         Instruction expr0Result = visit(ctx.expr(0));
         visit(ctx.expr(1));
@@ -217,7 +269,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         Register register1 = getReg(ctx.expr(1));
         Register register2 = getReg(true, ctx);
 
-        // Emit an opcode based on the type of operator
+        // Emit an instruction based on the type of operator
         switch (ctx.op.getType()) {
             case FrartellParser.AND:
                 emit(Instr.Compute, operatorof(Operator.Type.And), register0, register1, register2);
@@ -246,7 +298,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         Register register1 = getReg(ctx.expr(1));
         Register register2 = getReg(true, ctx);
 
-        // Emit an opcode based on the type of operator
+        // Emit an instruction based on the type of operator
         switch (ctx.op.getType()) {
             case FrartellParser.LW:
                 emit(Instr.Compute, operatorof(Operator.Type.Lt), register0, register1, register2);
@@ -281,7 +333,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         Register register1 = getReg(ctx.expr(1));
         Register register2 = getReg(true, ctx);
 
-        // Emit an opcode based on the type of operator
+        // Emit an instruction based on the type of operator
         switch (ctx.op.getType()) {
             case FrartellParser.EQ:
                 emit(Instr.Compute, operatorof(Operator.Type.Equal), register0, register1, register2);

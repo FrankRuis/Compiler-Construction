@@ -38,6 +38,7 @@ public class Operator extends Arg {
         Mul,
         Div,
         Mod,
+        Pow,
         Equal,
         NEq,
         Gt,

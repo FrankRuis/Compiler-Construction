@@ -21,7 +21,7 @@ public class SecondPassTest {
     @Test
     public void secondPassTest() throws Exception {
         // Get the file contents
-        String file = FileUtils.readFile(new File(FileUtils.getProjPath("samples/correct/correct1.frart")));
+        String file = FileUtils.readFile(new File(FileUtils.getProjPath("samples/correct/correct3.frart")));
 
         // Read the contents of the file and convert it to a token stream
         Lexer lexer = new FrartellLexer(new ANTLRInputStream(file));

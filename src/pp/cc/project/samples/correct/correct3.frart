@@ -1,0 +1,4 @@
+// Test program
+program test;
+
+int x = 10%-2;
