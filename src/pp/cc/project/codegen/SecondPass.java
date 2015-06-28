@@ -176,15 +176,15 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // This register is no longer needed
         register.setAvailable();
 
-        // Visit the blocks and store the result of the else block in an optional (Optional because blocks may be empty)
+        // Visit the if and else blocks
         visit(ctx.block(0));
-        Optional<Instruction> firstElseInstr = hasElse ?
-                Optional.of(visit(ctx.block(1))) : Optional.empty();
+        int elsePos = program.size() + 1;
+        visit(ctx.block(1));
 
         // If there is an else block, emit a branch to the first else block instruction
-        if (firstElseInstr.isPresent()) {
+        if (hasElse) {
             // Get the instruction number of the first else instruction and add 2 for the instructions we will emit later
-            int jumpTarget = instrNum(firstElseInstr.get()) + 2;
+            int jumpTarget = elsePos + 1;
 
             // Insert the branch instruction to the left of the  first if block instruction
             emitAt(branchPos, Instr.InvBranch, register,
@@ -197,8 +197,8 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
             jumpTarget = program.size() + 1;
 
             // Insert the jump instruction to the left of the first else block instruction
-            emitAt(instrNum(firstElseInstr.get()), Instr.Jump,
-                    new Target(Target.Type.Rel, new Constant(jumpTarget - instrNum(firstElseInstr.get()))));
+            emitAt(elsePos, Instr.Jump,
+                    new Target(Target.Type.Rel, new Constant(jumpTarget - elsePos)));
 
         // Else, emit a branch to skip the if block
         } else {
