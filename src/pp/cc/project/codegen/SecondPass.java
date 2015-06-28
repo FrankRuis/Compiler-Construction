@@ -84,9 +84,12 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     public Instruction visitDecl(@NotNull FrartellParser.DeclContext ctx) {
         Instruction exprResult = visit(ctx.expr());
 
+        // Get the register containing the result of the expression
         Register register = getReg(ctx.expr());
+        // Get the offset of the variable
         Constant offset = getOffset(ctx.decltarget());
 
+        // Store the expression result in the target variable
         emit(Instr.Store, register, new MemAddr(offset))
                 .setComment(String.format("store the contents of %s to variable %s",
                         register,
@@ -102,9 +105,12 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     public Instruction visitAssignStat(@NotNull FrartellParser.AssignStatContext ctx) {
         Instruction exprResult = visit(ctx.expr());
 
+        // Get the register containing the result of the expression
         Register register = getReg(ctx.expr());
+        // Get the offset of the variable
         Constant offset = getOffset(ctx.target());
 
+        // Store the result of the expression in the target variable
         emit(Instr.Store, register, new MemAddr(offset))
                 .setComment(String.format("store the contents of %s to variable %s",
                         register,
@@ -175,7 +181,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Assign registers for the left expression, right expression and target
         Register register0 = getReg(ctx.expr(0));
         Register register1 = getReg(ctx.expr(1));
-        Register register2 = getReg(ctx);
+        Register register2 = getReg(true, ctx);
 
         // Emit an opcode based on the type of operator
         switch (ctx.op.getType()) {
@@ -204,7 +210,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Assign registers for the left expression, right expression and target
         Register register0 = getReg(ctx.expr(0));
         Register register1 = getReg(ctx.expr(1));
-        Register register2 = getReg(ctx);
+        Register register2 = getReg(true, ctx);
 
         // Emit an opcode based on the type of operator
         switch (ctx.op.getType()) {
@@ -232,7 +238,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Assign registers for the expression and target and get the Zero register
         Register register0 = getReg(ctx, Reg.Zero);
         Register register1 = getReg(ctx.expr());
-        Register register2 = getReg(ctx);
+        Register register2 = getReg(true, ctx);
 
         // Subtract the result of the expression from the zero register and store it in the target register
         emit(Instr.Compute, operatorof(Operator.Type.Sub), register0, register1, register2);
@@ -260,7 +266,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // If the number is nonzero, load the number in an available register
         Register register;
         if (num != 0) {
-            register = getReg(ctx);
+            register = getReg(true, ctx);
             register.setUnavailable();
 
             return emit(Instr.Const, new Constant(num), register);
@@ -282,7 +288,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitIdAtom(@NotNull FrartellParser.IdAtomContext ctx) {
-        Register register = getReg(ctx);
+        Register register = getReg(true, ctx);
         register.setUnavailable();
 
         return emit(Instr.Load, new MemAddr(getOffset(ctx)), register);
@@ -290,7 +296,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitBoolAtom(@NotNull FrartellParser.BoolAtomContext ctx) {
-        Register register = getReg(ctx);
+        Register register = getReg(true, ctx);
         Constant bool = ctx.FALSE() != null ? FALSE : TRUE;
         register.setUnavailable();
 
@@ -333,6 +339,27 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         Register reg = registers.get(node);
 
         if (reg == null) {
+            // Find an available register or get RegA if none are available
+            reg = userRegisters.values().stream()
+                    .filter(Register::isAvailable)
+                    .findFirst().orElse(userRegisters.get(Reg.RegA));
+            registers.put(node, reg);
+        }
+
+        return reg;
+    }
+
+    /**
+     * Get the register associated with the given parse tree node or create a new register if there are none yet
+     * @param node The parse tree node
+     * @param target Whether or not this is a target register
+     * @return The associated register
+     */
+    public Register getReg(boolean target, ParseTree node) {
+        Register reg = registers.get(node);
+
+        // Target registers should not be the Zero register
+        if (reg == null || (target && reg.getName().equals(Reg.Zero))) {
             // Find an available register or get RegA if none are available
             reg = userRegisters.values().stream()
                     .filter(Register::isAvailable)
