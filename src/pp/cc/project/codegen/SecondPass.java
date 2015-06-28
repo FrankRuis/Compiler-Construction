@@ -70,7 +70,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     @Override
     public Instruction visitBlock(@NotNull FrartellParser.BlockContext ctx) {
         // If the block is not empty
-        if (ctx.stat(0) != null) {
+        if (ctx.stat().size() > 0) {
             Instruction firstInstruction = visit(ctx.stat(0));
 
             // Visit all instructions
@@ -78,7 +78,6 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
             // Return the last visited instruction
             return firstInstruction;
-
         // Do nothing if the block is empty
         } else {
             return super.visitBlock(ctx);
@@ -113,7 +112,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitAssignStat(@NotNull FrartellParser.AssignStatContext ctx) {
-        Instruction exprResult = visit(ctx.expr());
+        visit(ctx.expr());
 
         // Get the register containing the result of the expression
         Register register = getReg(ctx.expr());
@@ -121,15 +120,15 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         Constant offset = getOffset(ctx.target());
 
         // Store the result of the expression in the target variable
-        emit(Instr.Store, register, new MemAddr(offset))
-                .setComment(String.format("store the contents of %s to variable %s",
-                        register,
-                        ctx.target().getText()));
+        Instruction storeInstr = emit(Instr.Store, register, new MemAddr(offset));
+        storeInstr.setComment(String.format("store the contents of %s to variable %s",
+                register,
+                ctx.target().getText()));
 
         // This register is no longer needed
         register.setAvailable();
 
-        return exprResult;
+        return storeInstr;
     }
 
     @Override
@@ -188,7 +187,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
             // Insert the branch instruction to the left of the  first if block instruction
             emitAt(branchPos, Instr.InvBranch, register,
-                    new Target(Target.Type.Abs, new Constant(jumpTarget)))
+                    new Target(Target.Type.Rel, new Constant(jumpTarget - branchPos)))
                     .setComment(String.format("jump to instruction %d if %s contains the False value",
                             jumpTarget,
                             register));
@@ -198,7 +197,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
             // Insert the jump instruction to the left of the first else block instruction
             emitAt(instrNum(firstElseInstr.get()), Instr.Jump,
-                    new Target(Target.Type.Abs, new Constant(jumpTarget)));
+                    new Target(Target.Type.Rel, new Constant(jumpTarget - instrNum(firstElseInstr.get()))));
 
         // Else, emit a branch to skip the if block
         } else {
