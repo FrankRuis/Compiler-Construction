@@ -64,13 +64,20 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitBlock(@NotNull FrartellParser.BlockContext ctx) {
-        Instruction firstInstruction = visit(ctx.stat(0));
+        // If the block is not empty
+        if (ctx.stat(0) != null) {
+            Instruction firstInstruction = visit(ctx.stat(0));
 
-        // Visit all instructions
-        ctx.stat().stream().filter(stat -> stat != ctx.stat(0)).forEach(this::visit);
+            // Visit all instructions
+            ctx.stat().stream().filter(stat -> stat != ctx.stat(0)).forEach(this::visit);
 
-        // Return the last visited instruction
-        return firstInstruction;
+            // Return the last visited instruction
+            return firstInstruction;
+
+        // Do nothing if the block is empty
+        } else {
+            return super.visitBlock(ctx);
+        }
     }
 
     @Override
@@ -143,8 +150,14 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
         // Else, emit a branch to skip the if block
         } else {
-            emitAt(branchPos, Instr.Branch, register,
-                    new Target(Target.Type.Abs, new Constant(program.size())));
+            // Add 1 to the jump target because we will add the branch instruction later
+            int jumpTarget = program.size() + 1;
+
+            emitAt(branchPos, Instr.InvBranch, register,
+                    new Target(Target.Type.Abs, new Constant(jumpTarget)))
+                    .setComment(String.format("jump to instruction %d if %s contains the False value",
+                    jumpTarget,
+                    register));
         }
 
         return ifExprResult;
@@ -161,29 +174,52 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         Register register2 = getReg(ctx);
 
         // Emit an opcode based on the type of operator
-        if (ctx.MINUS() != null) {
-            emit(Instr.Compute, new Operator(Operator.Type.Sub), register0, register1, register2);
-        } else if (ctx.PLUS() != null) {
-            emit(Instr.Compute, new Operator(Operator.Type.Add), register0, register1, register2);
-        } else {
-            throw new RuntimeException("Unknown operator");
+        switch (ctx.op.getType()) {
+            case FrartellParser.MINUS:
+                emit(Instr.Compute, new Operator(Operator.Type.Sub), register0, register1, register2);
+                break;
+            case FrartellParser.PLUS:
+                emit(Instr.Compute, new Operator(Operator.Type.Add), register0, register1, register2);
+                break;
+            default:
+                throw new RuntimeException(String.format("Unknown operator in add expression: %s", ctx.op.getText()));
         }
 
         return expr0Result;
     }
 
     @Override
+    public Instruction visitBoolExpr(@NotNull FrartellParser.BoolExprContext ctx) {
+        return super.visitBoolExpr(ctx);
+    }
+
+    @Override
     public Instruction visitAtomExpr(@NotNull FrartellParser.AtomExprContext ctx) {
+        Instruction atomExpr = visit(ctx.atom());
         setReg(ctx, getReg(ctx.atom()));
-        return super.visit(ctx.atom());
+
+        return atomExpr;
     }
 
     @Override
     public Instruction visitIntAtom(@NotNull FrartellParser.IntAtomContext ctx) {
-        Register register = getReg(ctx);
-        register.setUnavailable();
+        // Get the integer's value
+        int num = Integer.parseInt(ctx.INTEGER().getText());
 
-        return emit(Instr.Const, new Constant(Integer.parseInt(ctx.INTEGER().getText())), register);
+        // If the number is nonzero, load the number in an available register
+        Register register;
+        if (num != 0) {
+            register = getReg(ctx);
+            register.setUnavailable();
+
+            return emit(Instr.Const, new Constant(num), register);
+
+        // If the number is zero, we can use the zero register
+        } else {
+            getReg(ctx, Reg.Zero);
+
+            return super.visitIntAtom(ctx);
+        }
     }
 
     @Override
@@ -195,19 +231,19 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitIdAtom(@NotNull FrartellParser.IdAtomContext ctx) {
-        Register reg = getReg(ctx);
-        reg.setUnavailable();
+        Register register = getReg(ctx);
+        register.setUnavailable();
 
-        return emit(Instr.Load, new MemAddr(getOffset(ctx)), reg);
+        return emit(Instr.Load, new MemAddr(getOffset(ctx)), register);
     }
 
     @Override
     public Instruction visitBoolAtom(@NotNull FrartellParser.BoolAtomContext ctx) {
-        Register reg = getReg(ctx);
+        Register register = getReg(ctx);
         Constant bool = ctx.FALSE() != null ? FALSE : TRUE;
-        reg.setUnavailable();
+        register.setUnavailable();
 
-        return emit(Instr.Const, bool, reg);
+        return emit(Instr.Const, bool, register);
     }
 
     /**
@@ -254,6 +290,19 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         }
 
         return reg;
+    }
+
+    /**
+     * Get a specific register and associate it with the given parse tree node
+     * @param node The parse tree node
+     * @param regType The register type to get
+     * @return The specified register
+     */
+    public Register getReg(ParseTree node, Reg regType) {
+        Register register = new Register(regType);
+        registers.put(node, register);
+
+        return register;
     }
 
     /**

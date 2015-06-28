@@ -6,7 +6,5 @@ int y = 2;
 int z = 0;
 
 if (True) {
-    z = y;
-    y = x;
-    x = z;
+
 }
