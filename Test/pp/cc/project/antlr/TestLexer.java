@@ -13,6 +13,8 @@ import java.util.List;
 
 /**
  * @author Frank
+ *
+ * Test the lexer on several strings of possible tokens
  */
 public class TestLexer {
     @Test
@@ -34,6 +36,7 @@ public class TestLexer {
             correct("var_X 7841");
             correct("aA_2134_asd321_;");
             correct("a ? b : c;");
+            correct("[\"a\",\"b\"]");
         } catch (Exception e) {
             fail("Failed to parse a string that should be parsed correctly.");
         }

@@ -18,6 +18,8 @@ import java.nio.file.Paths;
 
 /**
  * @author Frank
+ *
+ * Test the parser on correct and incorrect Frartell programs
  */
 public class TestParser extends FrartellBaseListener {
     private final Path BASE_CORRECT;

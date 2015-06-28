@@ -8,13 +8,12 @@ import pp.cc.project.dataobjects.type.*;
 
 /**
  * @author Frank
+ *
+ * Test opening and closing of scopes.
+ * Check the assignment of types to variables,
+ * and check overwriting variables from outer scopes in inner scopes.
  */
 public class TestScopes {
-    /**
-     * Test opening and closing of scopes.
-     * Check the assignment of types to variables,
-     * and check overwriting variables from outer scopes in inner scopes.
-     */
     @Test
     public void testScopes() {
         Scopes scopes = new Scopes();
@@ -48,7 +47,7 @@ public class TestScopes {
         // Add 'd' to the current scope as an Integer
         scopes.put("d", new IntType());
         assert(scopes.getType("d") instanceof IntType);
-        assertEquals(0, scopes.getOffset("d"));
+        assertEquals(24, scopes.getOffset("d"));
 
         // Overwrite 'a' with a String type
         scopes.put("a", new StringType(5));
