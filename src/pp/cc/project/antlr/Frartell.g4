@@ -19,6 +19,7 @@ stat
  | WHILE OPAR expr CPAR block                       #whileStat
  | ID args SEMCOL                                   #funcCalltStat
  | RETURN expr SEMCOL                               #returnStat
+ | block                                            #blockStat
  ;
 
 /** Expressions **/

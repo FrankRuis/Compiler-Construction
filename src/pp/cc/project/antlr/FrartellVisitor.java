@@ -59,6 +59,13 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitReturnStat(@NotNull FrartellParser.ReturnStatContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code blockStat}
+	 * labeled alternative in {@link FrartellParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockStat(@NotNull FrartellParser.BlockStatContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code arrayExpr}
 	 * labeled alternative in {@link FrartellParser#expr}.
 	 * @param ctx the parse tree
@@ -150,6 +157,12 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolExpr(@NotNull FrartellParser.BoolExprContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FrartellParser#block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlock(@NotNull FrartellParser.BlockContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code idTarget}
 	 * labeled alternative in {@link FrartellParser#target}.
 	 * @param ctx the parse tree
@@ -170,12 +183,6 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDecl(@NotNull FrartellParser.DeclContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link FrartellParser#declfunc}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclfunc(@NotNull FrartellParser.DeclfuncContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code idDeclTarget}
 	 * labeled alternative in {@link FrartellParser#decltarget}.
 	 * @param ctx the parse tree
@@ -190,23 +197,23 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArrayDeclTarget(@NotNull FrartellParser.ArrayDeclTargetContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link FrartellParser#block}.
+	 * Visit a parse tree produced by {@link FrartellParser#declfunc}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBlock(@NotNull FrartellParser.BlockContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link FrartellParser#args}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArgs(@NotNull FrartellParser.ArgsContext ctx);
+	T visitDeclfunc(@NotNull FrartellParser.DeclfuncContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link FrartellParser#pars}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPars(@NotNull FrartellParser.ParsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FrartellParser#args}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArgs(@NotNull FrartellParser.ArgsContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code parExprAtom}
 	 * labeled alternative in {@link FrartellParser#atom}.

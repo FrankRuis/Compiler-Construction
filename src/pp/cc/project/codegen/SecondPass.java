@@ -63,6 +63,11 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     }
 
     @Override
+    public Instruction visitBlockStat(@NotNull FrartellParser.BlockStatContext ctx) {
+        return visit(ctx.block());
+    }
+
+    @Override
     public Instruction visitBlock(@NotNull FrartellParser.BlockContext ctx) {
         // If the block is not empty
         if (ctx.stat(0) != null) {
@@ -248,6 +253,26 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         register1.setAvailable();
 
         return exprResult;
+    }
+
+    @Override
+    public Instruction visitNotExpr(@NotNull FrartellParser.NotExprContext ctx) {
+        Instruction exprResult = visit(ctx.expr());
+
+        // Get the register with the expression result and assign a register to this expression
+        Register register0 = getReg(ctx.expr());
+        Register register1 = getReg(ctx);
+
+        // Load the value for True in register1
+        emit(Instr.Const, TRUE, register1);
+
+        // Xor the expression result with the True value and store it in this expression's register
+        emit(Instr.Compute, operatorof(Operator.Type.Xor), register0, register1, register1);
+
+        // We don't need this register anymore
+        register0.setAvailable();
+
+        return  exprResult;
     }
 
     @Override

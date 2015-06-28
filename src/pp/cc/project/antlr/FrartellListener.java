@@ -89,6 +89,18 @@ public interface FrartellListener extends ParseTreeListener {
 	 */
 	void exitReturnStat(@NotNull FrartellParser.ReturnStatContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code blockStat}
+	 * labeled alternative in {@link FrartellParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlockStat(@NotNull FrartellParser.BlockStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code blockStat}
+	 * labeled alternative in {@link FrartellParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlockStat(@NotNull FrartellParser.BlockStatContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code arrayExpr}
 	 * labeled alternative in {@link FrartellParser#expr}.
 	 * @param ctx the parse tree
@@ -245,6 +257,16 @@ public interface FrartellListener extends ParseTreeListener {
 	 */
 	void exitBoolExpr(@NotNull FrartellParser.BoolExprContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FrartellParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlock(@NotNull FrartellParser.BlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FrartellParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlock(@NotNull FrartellParser.BlockContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code idTarget}
 	 * labeled alternative in {@link FrartellParser#target}.
 	 * @param ctx the parse tree
@@ -279,16 +301,6 @@ public interface FrartellListener extends ParseTreeListener {
 	 */
 	void exitDecl(@NotNull FrartellParser.DeclContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FrartellParser#declfunc}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclfunc(@NotNull FrartellParser.DeclfuncContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FrartellParser#declfunc}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclfunc(@NotNull FrartellParser.DeclfuncContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code idDeclTarget}
 	 * labeled alternative in {@link FrartellParser#decltarget}.
 	 * @param ctx the parse tree
@@ -313,25 +325,15 @@ public interface FrartellListener extends ParseTreeListener {
 	 */
 	void exitArrayDeclTarget(@NotNull FrartellParser.ArrayDeclTargetContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FrartellParser#block}.
+	 * Enter a parse tree produced by {@link FrartellParser#declfunc}.
 	 * @param ctx the parse tree
 	 */
-	void enterBlock(@NotNull FrartellParser.BlockContext ctx);
+	void enterDeclfunc(@NotNull FrartellParser.DeclfuncContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link FrartellParser#block}.
+	 * Exit a parse tree produced by {@link FrartellParser#declfunc}.
 	 * @param ctx the parse tree
 	 */
-	void exitBlock(@NotNull FrartellParser.BlockContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link FrartellParser#args}.
-	 * @param ctx the parse tree
-	 */
-	void enterArgs(@NotNull FrartellParser.ArgsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FrartellParser#args}.
-	 * @param ctx the parse tree
-	 */
-	void exitArgs(@NotNull FrartellParser.ArgsContext ctx);
+	void exitDeclfunc(@NotNull FrartellParser.DeclfuncContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FrartellParser#pars}.
 	 * @param ctx the parse tree
@@ -342,6 +344,16 @@ public interface FrartellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPars(@NotNull FrartellParser.ParsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FrartellParser#args}.
+	 * @param ctx the parse tree
+	 */
+	void enterArgs(@NotNull FrartellParser.ArgsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FrartellParser#args}.
+	 * @param ctx the parse tree
+	 */
+	void exitArgs(@NotNull FrartellParser.ArgsContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code parExprAtom}
 	 * labeled alternative in {@link FrartellParser#atom}.

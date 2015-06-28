@@ -101,6 +101,18 @@ public class FrartellBaseListener implements FrartellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBlockStat(@NotNull FrartellParser.BlockStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlockStat(@NotNull FrartellParser.BlockStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -257,6 +269,18 @@ public class FrartellBaseListener implements FrartellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBlock(@NotNull FrartellParser.BlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlock(@NotNull FrartellParser.BlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIdTarget(@NotNull FrartellParser.IdTargetContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -293,18 +317,6 @@ public class FrartellBaseListener implements FrartellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclfunc(@NotNull FrartellParser.DeclfuncContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclfunc(@NotNull FrartellParser.DeclfuncContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterIdDeclTarget(@NotNull FrartellParser.IdDeclTargetContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -329,25 +341,13 @@ public class FrartellBaseListener implements FrartellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlock(@NotNull FrartellParser.BlockContext ctx) { }
+	@Override public void enterDeclfunc(@NotNull FrartellParser.DeclfuncContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBlock(@NotNull FrartellParser.BlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArgs(@NotNull FrartellParser.ArgsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArgs(@NotNull FrartellParser.ArgsContext ctx) { }
+	@Override public void exitDeclfunc(@NotNull FrartellParser.DeclfuncContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -360,6 +360,18 @@ public class FrartellBaseListener implements FrartellListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPars(@NotNull FrartellParser.ParsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArgs(@NotNull FrartellParser.ArgsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArgs(@NotNull FrartellParser.ArgsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
