@@ -73,6 +73,7 @@ public class TestParser extends FrartellBaseListener {
                 // Walk the parse tree
                 new ParseTreeWalker().walk(this, parseTree);
 
+                // Skip the call to fail if an error occurred
                 if (errors) return;
 
                 fail(String.format("%s was parsed correctly but should have failed.", file.getFileName()));

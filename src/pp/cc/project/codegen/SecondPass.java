@@ -215,6 +215,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
             // Add 1 to the jump target because we will add the branch instruction later
             int jumpTarget = program.size() + 1;
 
+            // Insert the branch instruction to the left of the  first if block instruction
             emitAt(branchPos, Instr.InvBranch, register,
                     new Target(Target.Type.Rel, new Constant(jumpTarget - branchPos)))
                     .setComment(String.format("relative jump of %d if %s contains the False value",
@@ -236,26 +237,35 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // This register is no longer needed
         register.setAvailable();
 
-        // Visit the expressions
+        // Visit the second expression and free its register
         visit(ctx.expr(1));
-        Instruction expr2Result = visit(ctx.expr(2));
+        Register register1 = getReg(ctx.expr(1));
+        register1.setAvailable();
 
-        // Get the instruction number of the second expression and add 2 for the instructions we will emit later
-        int jumpTarget = instrNum(expr2Result) + 2;
+        // Set the position of the second expression
+        int expr3Pos = program.size() + 1;
 
-        // Insert the branch instruction to the left of the  first expression
+        // Visit the third expression and free its register
+        visit(ctx.expr(2));
+        Register register2 = getReg(ctx.expr(1));
+        register2.setAvailable();
+
+        // Add 1 to the expression position for the instruction we will emit later
+        int jumpTarget = expr3Pos + 1;
+
+        // Insert the branch instruction to the left of the second expression
         emitAt(branchPos, Instr.InvBranch, register,
-                new Target(Target.Type.Abs, new Constant(jumpTarget)))
-                .setComment(String.format("jump to instruction %d if %s contains the False value",
+                new Target(Target.Type.Rel, new Constant(jumpTarget - branchPos)))
+                .setComment(String.format("relative jump to %d if %s contains the False value",
                         jumpTarget,
                         register));
 
         // Get the current end of the program and add 1 for the jump instruction that we will emit later
         jumpTarget = program.size() + 1;
 
-        // Insert the jump instruction to the left of the first else block instruction
-        emitAt(instrNum(expr2Result), Instr.Jump,
-                new Target(Target.Type.Abs, new Constant(jumpTarget)));
+        // Insert the jump instruction to the left of the third expression
+        emitAt(expr3Pos, Instr.Jump,
+                new Target(Target.Type.Rel, new Constant(jumpTarget - expr3Pos)));
 
         setReg(ctx, getReg(ctx.expr(2)));
 
@@ -507,10 +517,13 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitParExprAtom(@NotNull FrartellParser.ParExprAtomContext ctx) {
+        // Visit the expression between parentheses
+        Instruction parExpr = visit(ctx.expr());
+
         // Set the register to that of the expression between parentheses
         setReg(ctx, getReg(ctx.expr()));
 
-        return visit(ctx.expr());
+        return parExpr;
     }
 
     @Override

@@ -24,7 +24,7 @@ public class SecondPassTest {
     @Test
     public void secondPassTest() throws Exception {
         // Get the file contents
-        File file = new File(FileUtils.getProjPath("samples/correct/correct1.frart"));
+        File file = new File(FileUtils.getProjPath("samples/correct/correct5.frart"));
 
         // Get the parse tree
         ParseTree parseTree = ParseUtils.getParseTree(file);
