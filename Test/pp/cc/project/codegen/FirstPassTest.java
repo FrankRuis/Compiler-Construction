@@ -10,6 +10,7 @@ import org.junit.Test;
 import pp.cc.project.antlr.FrartellLexer;
 import pp.cc.project.antlr.FrartellParser;
 import pp.cc.project.utils.FileUtils;
+import pp.cc.project.utils.ParseUtils;
 
 import java.io.File;
 
@@ -17,19 +18,22 @@ import static org.junit.Assert.*;
 
 /**
  * @author Frank
+ *
+ * Test the type checking phase
  */
 public class FirstPassTest {
     @Test
     public void testCheck() throws Exception {
-        // Get the file contents
-        String file = FileUtils.readFile(new File(FileUtils.getProjPath("samples/correct/correct1.frart")));
+        // The file to test
+        File file = new File(FileUtils.getProjPath("samples/correct/correct1.frart"));
 
-        // Read the contents of the file and convert it to a token stream
-        Lexer lexer = new FrartellLexer(new ANTLRInputStream(file));
-        FrartellParser parser = new FrartellParser(new CommonTokenStream(lexer));
-        ParseTree parseTree = parser.program();
+        // Get the parse tree
+        ParseTree parseTree = ParseUtils.getParseTree(file);
+
+        // Create a FirstPass object to start the type checking phase
+        FirstPass firstPass = new FirstPass();
 
         // Get the result of the type checking phase
-        FirstPassResult firstPassResult = new FirstPass().check(parseTree);
+        FirstPassResult firstPassResult = firstPass.check(parseTree);
     }
 }

@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
 import pp.cc.project.utils.FileUtils;
+import pp.cc.project.utils.ParseUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -42,10 +43,8 @@ public class TestParser extends FrartellBaseListener {
         try {
             // Go through all files in the correct files folder
             Files.walk(BASE_CORRECT).filter(Files::isRegularFile).forEach(file -> {
-                // Read the contents of the file and convert it to a token stream
-                Lexer lexer = new FrartellLexer(new ANTLRInputStream(FileUtils.readFile(file.toFile())));
-                FrartellParser parser = new FrartellParser(new CommonTokenStream(lexer));
-                ParseTree parseTree = parser.program();
+                // Get the parse tree
+                ParseTree parseTree = ParseUtils.getParseTree(file.toFile());
 
                 // Walk the parse tree
                 new ParseTreeWalker().walk(this, parseTree);

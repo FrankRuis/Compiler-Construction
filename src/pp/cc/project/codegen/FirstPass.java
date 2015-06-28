@@ -500,4 +500,11 @@ public class FirstPass extends FrartellBaseListener {
     private boolean closeScope() {
         return this.scopes.closeScope();
     }
+
+    /**
+     * @return the list of errors
+     */
+    public List<String> getErrors() {
+        return errors;
+    }
 }
