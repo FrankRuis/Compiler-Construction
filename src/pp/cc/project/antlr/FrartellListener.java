@@ -41,6 +41,18 @@ public interface FrartellListener extends ParseTreeListener {
 	 */
 	void exitAssignStat(@NotNull FrartellParser.AssignStatContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code declStat}
+	 * labeled alternative in {@link FrartellParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclStat(@NotNull FrartellParser.DeclStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code declStat}
+	 * labeled alternative in {@link FrartellParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclStat(@NotNull FrartellParser.DeclStatContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ifStat}
 	 * labeled alternative in {@link FrartellParser#stat}.
 	 * @param ctx the parse tree
@@ -290,16 +302,6 @@ public interface FrartellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArrayTarget(@NotNull FrartellParser.ArrayTargetContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link FrartellParser#decl}.
-	 * @param ctx the parse tree
-	 */
-	void enterDecl(@NotNull FrartellParser.DeclContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FrartellParser#decl}.
-	 * @param ctx the parse tree
-	 */
-	void exitDecl(@NotNull FrartellParser.DeclContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code idDeclTarget}
 	 * labeled alternative in {@link FrartellParser#decltarget}.

@@ -20,6 +20,16 @@ public class Scope {
      * Constructs an empty scope
      */
     public Scope() {
+        this.size = 0;
+        this.types = new LinkedHashMap<>();
+        this.offsets = new LinkedHashMap<>();
+    }
+
+    /**
+     * Constructs an empty scope with the given offset
+     */
+    public Scope(int offset) {
+        this.size = offset;
         this.types = new LinkedHashMap<>();
         this.offsets = new LinkedHashMap<>();
     }

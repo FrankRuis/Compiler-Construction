@@ -4,7 +4,7 @@ grammar Frartell;
 
 /** Program **/
 program
- : progname? (stat | decl | declfunc)* EOF
+ : progname? (stat | declfunc)* EOF
  ;
 
 /** Optional program name **/
@@ -15,6 +15,7 @@ progname
 /** Statements **/
 stat
  : target ASSIGN expr SEMCOL                        #assignStat
+ | type decltarget (ASSIGN expr)? SEMCOL            #declStat
  | IF OPAR expr CPAR block (ELSE block)?            #ifStat
  | WHILE OPAR expr CPAR block                       #whileStat
  | ID args SEMCOL                                   #funcCalltStat
@@ -41,18 +42,13 @@ expr
 
 /** block **/
 block
- : OBRACE (stat | decl)* CBRACE
+ : OBRACE (stat)* CBRACE
  ;
 
 /** Assignment target **/
 target
  : ID                    #idTarget
  | ID OSQ expr CSQ       #arrayTarget
- ;
-
-/** Declaration **/
-decl
- : type decltarget (ASSIGN expr)? SEMCOL
  ;
 
 /** Declaration target **/

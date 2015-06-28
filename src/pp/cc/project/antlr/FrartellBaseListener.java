@@ -53,6 +53,18 @@ public class FrartellBaseListener implements FrartellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDeclStat(@NotNull FrartellParser.DeclStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclStat(@NotNull FrartellParser.DeclStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIfStat(@NotNull FrartellParser.IfStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -300,18 +312,6 @@ public class FrartellBaseListener implements FrartellListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArrayTarget(@NotNull FrartellParser.ArrayTargetContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDecl(@NotNull FrartellParser.DeclContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDecl(@NotNull FrartellParser.DeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

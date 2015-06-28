@@ -3,10 +3,9 @@ program swapTest;
 
 int x = 1;
 int y = 2;
-int z = 0;
 
 if (True && (True || False)) {
-    z = x;
+    int z = x;
     x = y;
     y = z;
 }

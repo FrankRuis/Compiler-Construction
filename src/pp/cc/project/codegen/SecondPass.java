@@ -86,7 +86,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     }
 
     @Override
-    public Instruction visitDecl(@NotNull FrartellParser.DeclContext ctx) {
+    public Instruction visitDeclStat(@NotNull FrartellParser.DeclStatContext ctx) {
         Instruction exprResult = visit(ctx.expr());
 
         // Get the register containing the result of the expression

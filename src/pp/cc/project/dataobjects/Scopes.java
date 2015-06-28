@@ -10,12 +10,15 @@ import java.util.LinkedList;
  * Class for opening and closing scopes.
  */
 public class Scopes extends LinkedList<Scope> {
+    private int size; // Current scopes size in bytes
+
     /**
      * Constructs a list of scopes containing the outer scope
      */
     public Scopes() {
         super();
-        this.addFirst(new Scope());
+        this.size = 0;
+        this.addFirst(new Scope(size));
     }
 
     /**
@@ -31,7 +34,7 @@ public class Scopes extends LinkedList<Scope> {
      * Open a new scope
      */
     public Scope openScope() {
-        Scope scope = new Scope();
+        Scope scope = new Scope(size);
         this.addFirst(scope);
 
         return scope;
@@ -58,6 +61,7 @@ public class Scopes extends LinkedList<Scope> {
      * @return True if the variable was added successfully, else false
      */
     public boolean put(String id, Type type) {
+        this.size += type.size();
         return this.peekFirst().put(id, type);
     }
 
@@ -68,7 +72,7 @@ public class Scopes extends LinkedList<Scope> {
      */
     public Type getType(String id) {
         return this.stream().filter(scope -> scope.contains(id))
-                .findFirst().orElse(new Scope()).getType(id);
+                .findFirst().orElse(new Scope(size)).getType(id);
     }
 
     /**
@@ -78,6 +82,6 @@ public class Scopes extends LinkedList<Scope> {
      */
     public int getOffset(String id) {
         return this.stream().filter(scope -> scope.contains(id))
-                .findFirst().orElse(new Scope()).getOffset(id);
+                .findFirst().orElse(new Scope(size)).getOffset(id);
     }
 }

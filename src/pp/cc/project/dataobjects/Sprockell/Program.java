@@ -16,6 +16,7 @@ public class Program extends LinkedList<Instruction> {
      * Construct a program with one sprockell
      */
     public Program() {
+        super();
         sprockells = 1;
         name = "prog";
     }

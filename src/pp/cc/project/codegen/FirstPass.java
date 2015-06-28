@@ -14,7 +14,6 @@ import pp.cc.project.dataobjects.type.NoneType;
 import pp.cc.project.dataobjects.type.StringType;
 import pp.cc.project.dataobjects.type.Type;
 
-import java.lang.annotation.ElementType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,7 +105,7 @@ public class FirstPass extends FrartellBaseListener {
     }
 
     @Override
-    public void exitDecl(@NotNull FrartellParser.DeclContext ctx) {
+    public void exitDeclStat(@NotNull FrartellParser.DeclStatContext ctx) {
         checkType(ctx.expr(), getType(getEntry(ctx.decltarget())));
         setType(ctx, getType(ctx.expr()));
         setEntry(ctx, getEntry(ctx.decltarget()));

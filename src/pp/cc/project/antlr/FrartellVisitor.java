@@ -31,6 +31,13 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignStat(@NotNull FrartellParser.AssignStatContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code declStat}
+	 * labeled alternative in {@link FrartellParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclStat(@NotNull FrartellParser.DeclStatContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ifStat}
 	 * labeled alternative in {@link FrartellParser#stat}.
 	 * @param ctx the parse tree
@@ -176,12 +183,6 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitArrayTarget(@NotNull FrartellParser.ArrayTargetContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link FrartellParser#decl}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDecl(@NotNull FrartellParser.DeclContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code idDeclTarget}
 	 * labeled alternative in {@link FrartellParser#decltarget}.
