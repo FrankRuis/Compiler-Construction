@@ -237,6 +237,70 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     }
 
     @Override
+    public Instruction visitCompExpr(@NotNull FrartellParser.CompExprContext ctx) {
+        Instruction expr0Result = visit(ctx.expr(0));
+        visit(ctx.expr(1));
+
+        // Assign registers for the left expression, right expression and target
+        Register register0 = getReg(ctx.expr(0));
+        Register register1 = getReg(ctx.expr(1));
+        Register register2 = getReg(true, ctx);
+
+        // Emit an opcode based on the type of operator
+        switch (ctx.op.getType()) {
+            case FrartellParser.LW:
+                emit(Instr.Compute, operatorof(Operator.Type.Lt), register0, register1, register2);
+                break;
+            case FrartellParser.GR:
+                emit(Instr.Compute, operatorof(Operator.Type.Gt), register0, register1, register2);
+                break;
+            case FrartellParser.LWEQ:
+                emit(Instr.Compute, operatorof(Operator.Type.LtE), register0, register1, register2);
+                break;
+            case FrartellParser.GREQ:
+                emit(Instr.Compute, operatorof(Operator.Type.GtE), register0, register1, register2);
+                break;
+            default:
+                throw new RuntimeException(String.format("Unknown operator in boolean expression: %s", ctx.op.getText()));
+        }
+
+        // These registers are no longer needed
+        register0.setAvailable();
+        register1.setAvailable();
+
+        return expr0Result;
+    }
+
+    @Override
+    public Instruction visitEqExpr(@NotNull FrartellParser.EqExprContext ctx) {
+        Instruction expr0Result = visit(ctx.expr(0));
+        visit(ctx.expr(1));
+
+        // Assign registers for the left expression, right expression and target
+        Register register0 = getReg(ctx.expr(0));
+        Register register1 = getReg(ctx.expr(1));
+        Register register2 = getReg(true, ctx);
+
+        // Emit an opcode based on the type of operator
+        switch (ctx.op.getType()) {
+            case FrartellParser.EQ:
+                emit(Instr.Compute, operatorof(Operator.Type.Equal), register0, register1, register2);
+                break;
+            case FrartellParser.NEQ:
+                emit(Instr.Compute, operatorof(Operator.Type.NEq), register0, register1, register2);
+                break;
+            default:
+                throw new RuntimeException(String.format("Unknown operator in boolean expression: %s", ctx.op.getText()));
+        }
+
+        // These registers are no longer needed
+        register0.setAvailable();
+        register1.setAvailable();
+
+        return expr0Result;
+    }
+
+    @Override
     public Instruction visitUnaryMinExpr(@NotNull FrartellParser.UnaryMinExprContext ctx) {
         Instruction exprResult = visit(ctx.expr());
 
