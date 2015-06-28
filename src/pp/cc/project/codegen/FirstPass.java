@@ -106,7 +106,11 @@ public class FirstPass extends FrartellBaseListener {
 
     @Override
     public void exitDeclStat(@NotNull FrartellParser.DeclStatContext ctx) {
-        checkType(ctx.expr(), getType(getEntry(ctx.decltarget())));
+        // Variables may be initialized without a value
+        if (ctx.expr() != null) {
+            checkType(ctx.expr(), getType(getEntry(ctx.decltarget())));
+        }
+
         setType(ctx, getType(ctx.expr()));
         setEntry(ctx, getEntry(ctx.decltarget()));
     }

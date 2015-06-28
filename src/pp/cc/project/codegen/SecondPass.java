@@ -87,23 +87,28 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitDeclStat(@NotNull FrartellParser.DeclStatContext ctx) {
-        Instruction exprResult = visit(ctx.expr());
+        Instruction exprResult = null;
 
-        // Get the register containing the result of the expression
-        Register register = getReg(ctx.expr());
-        // Get the offset of the variable
-        Constant offset = getOffset(ctx.decltarget());
+        // Variables may be initialized with no value
+        if (ctx.expr() != null) {
+            exprResult = visit(ctx.expr());
 
-        // Store the expression result in the target variable
-        emit(Instr.Store, register, new MemAddr(offset))
-                .setComment(String.format("store the contents of %s to variable %s",
-                        register,
-                        ctx.decltarget().getText()));
+            // Get the register containing the result of the expression
+            Register register = getReg(ctx.expr());
+            // Get the offset of the variable
+            Constant offset = getOffset(ctx.decltarget());
 
-        // This register is no longer needed
-        register.setAvailable();
+            // Store the expression result in the target variable
+            emit(Instr.Store, register, new MemAddr(offset))
+                    .setComment(String.format("store the contents of %s to variable %s",
+                            register,
+                            ctx.decltarget().getText()));
 
-        return exprResult;
+            // This register is no longer needed
+            register.setAvailable();
+        }
+
+        return exprResult != null ? exprResult : super.visitDeclStat(ctx);
     }
 
     @Override
@@ -209,6 +214,8 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Insert the jump instruction to the left of the first else block instruction
         emitAt(instrNum(expr2Result), Instr.Jump,
                 new Target(Target.Type.Abs, new Constant(jumpTarget)));
+
+        setReg(ctx, getReg(ctx.expr(2)));
 
         return condExprResult;
     }
