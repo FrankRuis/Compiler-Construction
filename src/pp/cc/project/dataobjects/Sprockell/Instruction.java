@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
  * A sprockell instruction
  */
 public class Instruction {
-    private Instr instruction;
-    private List<Arg> args;
-    private Optional<String> comment;
+    private Instr instruction; // The instruction type
+    private List<Arg> args; // The instruction arguments
+    private Optional<String> comment; // A haskell comment placed behind the instruction
 
     /**
      * Construct an instruction

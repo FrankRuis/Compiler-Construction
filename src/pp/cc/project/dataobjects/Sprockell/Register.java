@@ -11,7 +11,7 @@ import java.util.List;
 public class Register extends Arg {
 
     private Reg name;
-    private boolean available;
+    private boolean available; // Whether or not this register is available for use
 
     /**
      * Construct a register with the given name
@@ -64,11 +64,7 @@ public class Register extends Arg {
         }
 
         Register other = (Register) obj;
-        if (!getName().equals(other.getName())) {
-            return false;
-        }
-
-        return true;
+        return getName().equals(other.getName());
     }
 
     @Override

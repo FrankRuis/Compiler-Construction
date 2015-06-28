@@ -11,8 +11,11 @@ import pp.cc.project.dataobjects.type.Type;
  * Contains the results of the type checking phase
  */
 public class FirstPassResult {
+    // Mapping parse tree nodes to their their entry in the control flow graph
     private final ParseTreeProperty<ParserRuleContext> entries = new ParseTreeProperty<>();
+    // Mapping from expressions to types
     private final ParseTreeProperty<Type> types = new ParseTreeProperty<>();
+    // Mapping from variables to their offset in memory
     private final ParseTreeProperty<Integer> offsets = new ParseTreeProperty<>();
 
     /**

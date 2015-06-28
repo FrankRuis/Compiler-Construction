@@ -3,11 +3,15 @@ package pp.cc.project.dataobjects.Sprockell;
 /**
  * @author Frank
  *
- * Possible arguments for Sprockell instructions
+ * An argument for a Sprockell instruction
  */
 public class Arg {
-    private final Type type;
+    private final Type type; // The type of argument
 
+    /**
+     * Construct an argument of the given type
+     * @param type The argument type
+     */
     protected Arg(Type type) {
         this.type = type;
     }
@@ -24,10 +28,15 @@ public class Arg {
      * Available argument types
      */
     public enum Type {
+        /** A register */
         Reg,
+        /** A constant (Int or Char) */
         Const,
+        /** A jump target */
         Target,
+        /** A computation operator */
         Operator,
+        /** A memory address */
         MemAddr
     }
 }

@@ -40,7 +40,7 @@ expr
  | atom                                                       #atomExpr
  ;
 
-/** block **/
+/** Block **/
 block
  : OBRACE (stat)* CBRACE
  ;
@@ -118,7 +118,6 @@ EQ:       '==';
 NEQ:      '!=';
 NOT:      '!';
 ASSIGN:   '=';
-DOT:      '.';
 QMARK:    '?';
 COLON:    ':';
 

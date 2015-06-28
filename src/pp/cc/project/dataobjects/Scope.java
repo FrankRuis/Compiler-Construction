@@ -27,6 +27,7 @@ public class Scope {
 
     /**
      * Constructs an empty scope with the given offset
+     * @param offset The initial offset
      */
     public Scope(int offset) {
         this.size = offset;
@@ -45,16 +46,20 @@ public class Scope {
 
     /**
      * Declare the given variable in this scope
-     * @param id The variable's id
-     * @param type The variable's type
+     * @param id The variable id
+     * @param type The variable type
      * @return True if the variable was added successfully, else false
      */
     public boolean put(String id, Type type) {
         boolean result = !this.types.containsKey(id);
 
+        // If the variable was not yet added
         if (result) {
+            // Add the type and offset of the variable
             this.types.put(id, type);
             this.offsets.put(id, this.size);
+
+            // Increase the scope size
             this.size += type.size();
         }
 
@@ -63,7 +68,7 @@ public class Scope {
 
     /**
      * Get the type of a variable with the given id
-     * @param id The variable's id
+     * @param id The variable id
      * @return The type of the variable
      */
     public Type getType(String id) {
@@ -72,7 +77,7 @@ public class Scope {
 
     /**
      * Get the offset of the variable with the given id in the current scope
-     * @param id The variable's id
+     * @param id The variable id
      * @return The offset of the variable in the current scope
      */
     public Integer getOffset(String id) {

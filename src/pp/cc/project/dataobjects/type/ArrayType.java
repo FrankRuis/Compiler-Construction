@@ -20,6 +20,9 @@ public class ArrayType extends Type {
         this.elemType = elemType;
     }
 
+    /**
+     * @return The type of the elements in this array
+     */
     public Type getElemType() {
         return this.elemType;
     }

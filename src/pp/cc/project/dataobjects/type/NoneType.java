@@ -21,4 +21,9 @@ public class NoneType extends Type {
     public int size() {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "None";
+    }
 }
