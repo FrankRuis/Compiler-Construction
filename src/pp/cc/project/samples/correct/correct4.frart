@@ -2,8 +2,6 @@ program test;
 
 int x = 0;
 
-if (True) {
-    x = 0;
-} else {
-    x = 0;
-}
+while (True && True || False) {
+        x = 0;
+    }

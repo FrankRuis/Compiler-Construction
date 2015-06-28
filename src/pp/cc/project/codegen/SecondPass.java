@@ -145,15 +145,16 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         visit(ctx.block());
 
         // Emit the jump to the return position
-        emit(Instr.Jump, new Target(Target.Type.Abs, new Constant(returnPos)));
+        Instruction jumpInstr = emit(Instr.Jump,
+                new Target(Target.Type.Rel, new Constant(returnPos - program.size() - 1)));
 
-        // Set the jump target to the next instruction
-        int jumpTarget = program.size() + 1;
+        // Set the jump target to the instruction after the jump instruction
+        int jumpTarget = instrNum(jumpInstr) - branchPos + 2;
 
         // Emit an inverted branch instruction
         emitAt(branchPos, Instr.InvBranch, register,
-                new Target(Target.Type.Abs, new Constant(jumpTarget)))
-                .setComment(String.format("jump to instruction %d if %s contains the False value",
+                new Target(Target.Type.Rel, new Constant(jumpTarget)))
+                .setComment(String.format("relative jump of %d if %s contains the False value",
                         jumpTarget,
                         register));
 
@@ -188,8 +189,8 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
             // Insert the branch instruction to the left of the  first if block instruction
             emitAt(branchPos, Instr.InvBranch, register,
                     new Target(Target.Type.Rel, new Constant(jumpTarget - branchPos)))
-                    .setComment(String.format("jump to instruction %d if %s contains the False value",
-                            jumpTarget,
+                    .setComment(String.format("relative jump of %d if %s contains the False value",
+                            jumpTarget - branchPos,
                             register));
 
             // Get the current end of the program and add 1 for the jump instruction that we will emit later
@@ -206,8 +207,8 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
             emitAt(branchPos, Instr.InvBranch, register,
                     new Target(Target.Type.Rel, new Constant(jumpTarget - branchPos)))
-                    .setComment(String.format("jump to instruction %d if %s contains the False value",
-                    jumpTarget,
+                    .setComment(String.format("relative jump of %d if %s contains the False value",
+                    jumpTarget - branchPos,
                     register));
         }
 
