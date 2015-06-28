@@ -133,6 +133,38 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     }
 
     @Override
+    public Instruction visitWhileStat(@NotNull FrartellParser.WhileStatContext ctx) {
+        // Set the loop position before the condition check
+        int returnPos = program.size();
+        Instruction conditionExpr = visit(ctx.expr());
+        // Set the position for the jump instruction after the condition check
+        int branchPos = program.size();
+
+        Register register = getReg(ctx.expr());
+
+        // Visit the while body
+        visit(ctx.block());
+
+        // Emit the jump to the return position
+        emit(Instr.Jump, new Target(Target.Type.Abs, new Constant(returnPos)));
+
+        // Set the jump target to the next instruction
+        int jumpTarget = program.size() + 1;
+
+        // Emit an inverted branch instruction
+        emitAt(branchPos, Instr.InvBranch, register,
+                new Target(Target.Type.Abs, new Constant(jumpTarget)))
+                .setComment(String.format("jump to instruction %d if %s contains the False value",
+                        jumpTarget,
+                        register));
+
+        // This register is no longer needed
+        register.setAvailable();
+
+        return conditionExpr;
+    }
+
+    @Override
     public Instruction visitIfStat(@NotNull FrartellParser.IfStatContext ctx) {
         Instruction ifExprResult = visit(ctx.expr());
         // Set the position for the branch instruction to right after the if expression
