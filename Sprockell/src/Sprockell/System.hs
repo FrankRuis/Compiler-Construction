@@ -8,8 +8,10 @@ module Sprockell.System
 
 import Control.Monad
 import System.IO
+import System.Random
 import Data.Maybe
 import Data.Bits
+import Data.Time.Clock.POSIX
 import Debug.Trace
 import Sprockell.Components
 import Sprockell.TypesEtc
@@ -48,6 +50,9 @@ data SystemState = SysState
 stdio = Addr stdioAddr
 stdioAddr = 0x1000000
 
+debugio = Addr debugioAddr
+debugioAddr = 0x1000001
+
 type IODevice = SharedMem -> Request -> IO (SharedMem, Maybe Reply)
 
 memDevice :: IODevice
@@ -58,18 +63,24 @@ memDevice mem (addr, TestReq)        = return (mem <~= (addr, 1),     Just test)
 
 stdDevice :: IODevice
 stdDevice mem (_, WriteReq value) = putChar (chr value) >> return (mem, Nothing)
-stdDevice _   (a, TestReq) = error ("TestAndSet not supported on address: " ++ show a)
-stdDevice mem (_, ReadReq) = fmap ((,) mem . Just) $ do
+stdDevice _   (a, TestReq)        = error ("TestAndSet not supported on address: " ++ show a)
+stdDevice mem (_, ReadReq)        = fmap ((,) mem . Just) $ do
     rdy <- hReady stdin
     if rdy
         then fmap ord getChar
         else return (-1)
 
+debugDevice :: IODevice
+debugDevice mem (_, WriteReq value) = putStr (show value) >> return (mem, Nothing)
+debugDevice _   (a, TestReq)        = error ("TestAndSet not supported on address: " ++ show a)
+debugDevice _ (a, ReadReq)          = error ("Read not supported on address: " ++ show a)
+
 -- ===========================================================================================
 -- ===========================================================================================
 withDevice :: Address -> IODevice
-withDevice addr | addr < stdioAddr = memDevice
-                | otherwise        = stdDevice
+withDevice addr | addr < stdioAddr    = memDevice
+                | addr < debugioAddr  = stdDevice
+                | otherwise           = debugDevice
 
 processRequest :: Maybe Request -> SharedMem -> IO (SharedMem, Maybe Reply)
 processRequest Nothing    mem = return (mem, Nothing)
@@ -104,8 +115,8 @@ system SysConf{..} SysState{..} = do
 -- ===========================================================================================
 -- "Simulates" sprockells by recursively calling them over and over again
 simulate :: SystemConfig -> (SystemState -> String) -> SystemState -> IO SystemState
-simulate sysConf debugFunc sysState@SysState{..}
-    | all halted sprs && all isEmptyQueue sReqFifos  = return sysState
+simulate sysConf debugFunc sysState
+    | all halted (sprs sysState) = return sysState
     | otherwise = do
         sysState' <- system sysConf sysState
         putStr (debugFunc sysState')
