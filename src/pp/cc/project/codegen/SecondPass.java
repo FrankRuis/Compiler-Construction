@@ -10,7 +10,6 @@ import pp.cc.project.dataobjects.Sprockell.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author Frank
@@ -19,15 +18,15 @@ import java.util.Optional;
  */
 public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
-    // Constant values for False and True expressions
+    /* Constant values for False and True expressions */
     private final Constant FALSE = new Constant(0);
     private final Constant TRUE = new Constant(1);
 
-    private Program program;
-    private FirstPassResult result;
-    private ParseTreeProperty<Register> registers;
+    private Program program; // The sprockell program object
+    private FirstPassResult result; // The result of the type checking phase
+    private ParseTreeProperty<Register> registers; // The registers mapped to parse tree nodes
 
-    private Map<Reg, Register> userRegisters;
+    private Map<Reg, Register> userRegisters; // Map of the usable user registers
 
     /**
      * Initialize a SecondPass object
@@ -49,21 +48,26 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     public Program generate(ParseTree tree, FirstPassResult result) {
         this.result = result;
 
+        // Call the visitor methods
         tree.accept(this);
 
+        // Emit the end program instruction
         emit(Instr.EndProg);
 
+        // Return the generated program
         return this.program;
     }
 
     @Override
     public Instruction visitProgname(@NotNull FrartellParser.PrognameContext ctx) {
+        // Set the program name to the text of the ID node
         program.setName(ctx.ID().getText());
         return super.visitProgname(ctx);
     }
 
     @Override
     public Instruction visitBlockStat(@NotNull FrartellParser.BlockStatContext ctx) {
+        // Visit the block
         return visit(ctx.block());
     }
 
@@ -467,6 +471,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitAtomExpr(@NotNull FrartellParser.AtomExprContext ctx) {
+        // Visit the atom expression and set the register to that of the visited atom
         Instruction atomExpr = visit(ctx.atom());
         setReg(ctx, getReg(ctx.atom()));
 
@@ -496,6 +501,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitParExprAtom(@NotNull FrartellParser.ParExprAtomContext ctx) {
+        // Set the register to that of the expression between parentheses
         setReg(ctx, getReg(ctx.expr()));
 
         return visit(ctx.expr());
@@ -503,18 +509,24 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitIdAtom(@NotNull FrartellParser.IdAtomContext ctx) {
+        // Assign a register
         Register register = getReg(true, ctx);
         register.setUnavailable();
 
+        // Load the value of this ID to the register
         return emit(Instr.Load, new MemAddr(getOffset(ctx)), register);
     }
 
     @Override
     public Instruction visitBoolAtom(@NotNull FrartellParser.BoolAtomContext ctx) {
+        // Assign a register
         Register register = getReg(true, ctx);
+
+        // If the false token is present choose the False constant, else choose the True constant
         Constant bool = ctx.FALSE() != null ? FALSE : TRUE;
         register.setUnavailable();
 
+        // Store the chosen boolean value in the register
         return emit(Instr.Const, bool, register);
     }
 
@@ -553,11 +565,14 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     public Register getReg(ParseTree node) {
         Register reg = registers.get(node);
 
+        // If the given parse tree node has no associated register
         if (reg == null) {
             // Find an available register or get RegA if none are available
             reg = userRegisters.values().stream()
                     .filter(Register::isAvailable)
                     .findFirst().orElse(userRegisters.get(Reg.RegA));
+
+            // Add the register to the register map
             registers.put(node, reg);
         }
 
@@ -565,7 +580,8 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     }
 
     /**
-     * Get the register associated with the given parse tree node or create a new register if there are none yet
+     * Get the register associated with the given parse tree node or create a new register if there are none yet<br>
+     * Assigns a new register if the associated register is the Zero register.
      * @param node The parse tree node
      * @param target Whether or not this is a target register
      * @return The associated register
@@ -573,12 +589,14 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     public Register getReg(boolean target, ParseTree node) {
         Register reg = registers.get(node);
 
-        // Target registers should not be the Zero register
+        // If the given parse tree node has no associated register or the associated register is the Zero register
         if (reg == null || (target && reg.getName().equals(Reg.Zero))) {
             // Find an available register or get RegA if none are available
             reg = userRegisters.values().stream()
                     .filter(Register::isAvailable)
                     .findFirst().orElse(userRegisters.get(Reg.RegA));
+
+            // Add the register to the register map
             registers.put(node, reg);
         }
 
