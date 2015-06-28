@@ -13,6 +13,7 @@ data Instruction =
         | Const Value Reg                    -- Const v r: put value v in register r
 
         | Branch Reg Target                  -- Branch r t: conditional jump, depending on register r
+		| InvBranch Reg Target				 -- InvBranch r t: Invert of Branch r t
         | Jump Target                        -- Jump t: jump to target t (absolute, relative, indirect)
 
         | Load MemAddr Reg                   -- Load (Addr a) r : from "memory a" to "regbank r"
@@ -56,7 +57,7 @@ data Target = Abs CodeAddr
             | Ind Reg
             deriving (Eq,Show,Read)
 
-data Operator = Add  | Sub | Mul  | Div | Mod 
+data Operator = Add  | Sub | Mul  | Div | Mod | Pow
               -- comparision operations
               |  Equal | NEq | Gt | Lt | GtE | LtE
               -- logical/binary operations
@@ -76,6 +77,7 @@ type CodeAddr = Int32
 data CondCode = CFalse
               | CTrue
               | CReg
+			  | InvReg
               | CWait
               deriving (Eq,Show)
 

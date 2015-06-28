@@ -86,6 +86,9 @@ decode instr = case instr of
     Branch cr (Abs n)    -> nullcode {condCode=CReg, inputX=cr, target=TAbs, immValue=n}
     Branch cr (Rel n)    -> nullcode {condCode=CReg, inputX=cr, target=TRel, immValue=n}
     Branch cr (Ind i)    -> nullcode {condCode=CReg, inputX=cr, target=TInd, inputY=i}
+    InvBranch cr (Abs n) -> nullcode {condCode=InvReg, inputX=cr, target=TAbs, immValue=n}
+    InvBranch cr (Rel n) -> nullcode {condCode=InvReg, inputX=cr, target=TRel, immValue=n}
+    InvBranch cr (Ind i) -> nullcode {condCode=InvReg, inputX=cr, target=TInd, inputY=i}
     Jump   (Abs n)       -> nullcode {condCode=CTrue, target=TAbs, immValue=n}
     Jump   (Rel n)       -> nullcode {condCode=CTrue, target=TRel, immValue=n}
     Jump   (Ind i)       -> nullcode {condCode=CTrue, target=TInd, inputY=i}
@@ -120,6 +123,7 @@ alu opCode x y = case opCode of
         Mul    -> x * y
         Div    -> x `div` y
         Mod    -> x `mod` y
+        Pow	   -> x ^ y
         Equal  -> intBool (x == y)
         NEq    -> intBool (x /= y)
         Gt     -> intBool (x > y)
@@ -164,6 +168,7 @@ condition cCode cReg hasInput = case cCode of
         CFalse -> False
         CTrue  -> True
         CReg   -> cReg /= 0
+        InvReg -> cReg == 0
         CWait  -> not hasInput
 
 targetPC :: TargetCode -> CodeAddr -> Value -> Value -> CodeAddr
