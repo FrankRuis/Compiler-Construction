@@ -19,6 +19,16 @@ public interface FrartellListener extends ParseTreeListener {
 	 */
 	void exitProgram(@NotNull FrartellParser.ProgramContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FrartellParser#progname}.
+	 * @param ctx the parse tree
+	 */
+	void enterProgname(@NotNull FrartellParser.PrognameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FrartellParser#progname}.
+	 * @param ctx the parse tree
+	 */
+	void exitProgname(@NotNull FrartellParser.PrognameContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code assignStat}
 	 * labeled alternative in {@link FrartellParser#stat}.
 	 * @param ctx the parse tree

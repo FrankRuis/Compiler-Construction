@@ -1,13 +1,12 @@
-// If statement and variable swap test
+// Program to test swapping of variables
+program swapTest;
+
 int x = 1;
-int y = (1 + 1);
+int y = 2;
 int z = 0;
 
 if (True) {
     z = y;
     y = x;
     x = z;
-} else {
-    x = 0;
-    y = 0;
 }

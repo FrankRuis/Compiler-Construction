@@ -30,6 +30,36 @@ public class Program extends LinkedList<Instruction> {
     }
 
     /**
+     * @return the program name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Set the program name
+     * @param name The name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return The amount of sprockells
+     */
+    public int getSprockells() {
+        return sprockells;
+    }
+
+    /**
+     * Set the amount of sprockells to deploy
+     * @param sprockells The amount of sprockells
+     */
+    public void setSprockells(int sprockells) {
+        this.sprockells = sprockells;
+    }
+
+    /**
      * Get the instruction number of the given instruction
      * @param instruction The instruction
      * @return The instruction number

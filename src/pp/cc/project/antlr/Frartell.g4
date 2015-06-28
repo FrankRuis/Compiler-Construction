@@ -4,7 +4,12 @@ grammar Frartell;
 
 /** Program **/
 program
- : (stat | decl | declfunc)* EOF
+ : progname? (stat | decl | declfunc)* EOF
+ ;
+
+/** Optional program name **/
+progname
+ : PROGRAM ID SEMCOL
  ;
 
 /** Statement **/
@@ -96,6 +101,7 @@ BOOL:     'bool';
 STR:      'String';
 DEF:      'def';
 RETURN:   'return';
+PROGRAM:  'program';
 
 /** Operators **/
 MINUS:    '-';

@@ -57,6 +57,12 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     }
 
     @Override
+    public Instruction visitProgname(@NotNull FrartellParser.PrognameContext ctx) {
+        program.setName(ctx.ID().getText());
+        return super.visitProgname(ctx);
+    }
+
+    @Override
     public Instruction visitBlock(@NotNull FrartellParser.BlockContext ctx) {
         Instruction firstInstruction = visit(ctx.stat(0));
 

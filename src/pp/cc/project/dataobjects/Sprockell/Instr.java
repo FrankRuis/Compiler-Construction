@@ -13,7 +13,9 @@ import java.util.stream.Collectors;
  * Sprockell instruction type
  */
 public enum Instr {
-    /* Local instructions */
+    /*
+      Local instructions
+    */
 
     /**
      * Store arg1 in arg2<br>
@@ -77,7 +79,9 @@ public enum Instr {
      */
     EndProg(0),
 
-    /* System instructions */
+    /*
+     System instructions
+    */
 
     /**
      * Send request to shared memory to fetch arg1<br>

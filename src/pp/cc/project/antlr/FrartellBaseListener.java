@@ -29,6 +29,18 @@ public class FrartellBaseListener implements FrartellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterProgname(@NotNull FrartellParser.PrognameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProgname(@NotNull FrartellParser.PrognameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAssignStat(@NotNull FrartellParser.AssignStatContext ctx) { }
 	/**
 	 * {@inheritDoc}

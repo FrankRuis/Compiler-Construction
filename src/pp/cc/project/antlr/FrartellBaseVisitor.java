@@ -25,6 +25,13 @@ public class FrartellBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitProgname(@NotNull FrartellParser.PrognameContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitAssignStat(@NotNull FrartellParser.AssignStatContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

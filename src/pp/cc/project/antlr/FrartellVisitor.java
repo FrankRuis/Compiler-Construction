@@ -18,6 +18,12 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(@NotNull FrartellParser.ProgramContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FrartellParser#progname}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProgname(@NotNull FrartellParser.PrognameContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code assignStat}
 	 * labeled alternative in {@link FrartellParser#stat}.
 	 * @param ctx the parse tree
