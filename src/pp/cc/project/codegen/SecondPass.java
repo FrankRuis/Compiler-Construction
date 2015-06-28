@@ -92,6 +92,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
                         register,
                         ctx.decltarget().getText()));
 
+        // This register is no longer needed
         register.setAvailable();
 
         return exprResult;
@@ -109,6 +110,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
                         register,
                         ctx.target().getText()));
 
+        // This register is no longer needed
         register.setAvailable();
 
         return exprResult;
@@ -117,11 +119,13 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     @Override
     public Instruction visitIfStat(@NotNull FrartellParser.IfStatContext ctx) {
         Instruction ifExprResult = visit(ctx.expr());
-        int branchPos = program.instructionNumber(ifExprResult) + 1;
+        // Set the position for the branch instruction to right after the if expression
+        int branchPos = program.size();
         Register register = getReg(ctx.expr());
         setReg(ctx, register);
         boolean hasElse = ctx.block(1) != null;
 
+        // This register is no longer needed
         register.setAvailable();
 
         // Visit the blocks and store the result of the else block in an optional (Optional because blocks may be empty)
@@ -176,21 +180,68 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Emit an opcode based on the type of operator
         switch (ctx.op.getType()) {
             case FrartellParser.MINUS:
-                emit(Instr.Compute, new Operator(Operator.Type.Sub), register0, register1, register2);
+                emit(Instr.Compute, operatorof(Operator.Type.Sub), register0, register1, register2);
                 break;
             case FrartellParser.PLUS:
-                emit(Instr.Compute, new Operator(Operator.Type.Add), register0, register1, register2);
+                emit(Instr.Compute, operatorof(Operator.Type.Add), register0, register1, register2);
                 break;
             default:
                 throw new RuntimeException(String.format("Unknown operator in add expression: %s", ctx.op.getText()));
         }
+
+        // These registers are no longer needed
+        register0.setAvailable();
+        register1.setAvailable();
 
         return expr0Result;
     }
 
     @Override
     public Instruction visitBoolExpr(@NotNull FrartellParser.BoolExprContext ctx) {
-        return super.visitBoolExpr(ctx);
+        Instruction expr0Result = visit(ctx.expr(0));
+        visit(ctx.expr(1));
+
+        // Assign registers for the left expression, right expression and target
+        Register register0 = getReg(ctx.expr(0));
+        Register register1 = getReg(ctx.expr(1));
+        Register register2 = getReg(ctx);
+
+        // Emit an opcode based on the type of operator
+        switch (ctx.op.getType()) {
+            case FrartellParser.AND:
+                emit(Instr.Compute, operatorof(Operator.Type.And), register0, register1, register2);
+                break;
+            case FrartellParser.OR:
+                emit(Instr.Compute, operatorof(Operator.Type.Or), register0, register1, register2);
+                break;
+            default:
+                throw new RuntimeException(String.format("Unknown operator in boolean expression: %s", ctx.op.getText()));
+        }
+
+        // These registers are no longer needed
+        register0.setAvailable();
+        register1.setAvailable();
+
+        return expr0Result;
+    }
+
+    @Override
+    public Instruction visitUnaryMinExpr(@NotNull FrartellParser.UnaryMinExprContext ctx) {
+        Instruction exprResult = visit(ctx.expr());
+
+        // Assign registers for the expression and target and get the Zero register
+        Register register0 = getReg(ctx, Reg.Zero);
+        Register register1 = getReg(ctx.expr());
+        Register register2 = getReg(ctx);
+
+        // Subtract the result of the expression from the zero register and store it in the target register
+        emit(Instr.Compute, operatorof(Operator.Type.Sub), register0, register1, register2);
+
+        // These registers are no longer needed
+        register0.setAvailable();
+        register1.setAvailable();
+
+        return exprResult;
     }
 
     @Override
@@ -330,5 +381,14 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
      */
     public int instrNum(Instruction instruction) {
         return program.instructionNumber(instruction);
+    }
+
+    /**
+     * Create an operator of the given type
+     * @param type The type of operator
+     * @return The specified operator
+     */
+    public Operator operatorof(Operator.Type type) {
+        return new Operator(type);
     }
 }
