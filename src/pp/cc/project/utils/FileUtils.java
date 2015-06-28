@@ -1,5 +1,7 @@
 package pp.cc.project.utils;
 
+import pp.cc.project.dataobjects.Sprockell.Program;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -62,5 +64,41 @@ public class FileUtils {
      */
     public static String getProjPath(String... args) {
         return Paths.get(getBase() + "/pp/cc/project/", args).toString();
+    }
+
+    /**
+     * Get the path to the parent directory of the given path
+     * @param path The path
+     * @return The path to the parent directory
+     */
+    public static String getParent(String path) {
+        return Paths.get(path).getParent().toString();
+    }
+
+    /**
+     * Create a haskell file with the given sprockell program<br>
+     * File is saved in the Generated Programs folder
+     * @param program The program to convert to a haskell file
+     */
+    public static void createSprockellFile(Program program) {
+        // Path to the generated programs folder
+        Path path = Paths.get(getParent(getBase()), "Generated Programs");
+
+        // If the generated programs folder does not yet exist
+        if (Files.notExists(path)) {
+            // Create the folder
+            new File(path.toString()).mkdir();
+        }
+
+        // Set the path to that of the desired file
+        path = path.resolve(program.getName() + ".hs");
+
+        try {
+            // Create the file and write the program to it
+            new File(path.toString());
+            Files.write(path, program.toString().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

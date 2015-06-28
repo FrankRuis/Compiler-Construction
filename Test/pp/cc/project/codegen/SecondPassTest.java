@@ -21,7 +21,7 @@ public class SecondPassTest {
     @Test
     public void secondPassTest() throws Exception {
         // Get the file contents
-        String file = FileUtils.readFile(new File(FileUtils.getProjPath("samples/correct/correct5.frart")));
+        String file = FileUtils.readFile(new File(FileUtils.getProjPath("samples/correct/correct1.frart")));
 
         // Read the contents of the file and convert it to a token stream
         Lexer lexer = new FrartellLexer(new ANTLRInputStream(file));
@@ -31,9 +31,10 @@ public class SecondPassTest {
         // Get the result of the type checking phase
         FirstPassResult firstPassResult = new FirstPass().check(parseTree);
 
+        // Generate a sprockell program
         Program program = new SecondPass().generate(parseTree, firstPassResult);
 
-        System.out.println("Printing program:");
-        System.out.println(program);
+        // Create a haskell file from the sprockell program
+        FileUtils.createSprockellFile(program);
     }
 }
