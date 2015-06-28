@@ -1,12 +1,19 @@
-program test;
+/*
+ Test an if statement in a while loop, result should be:
+ x = 2;
+ y = 2;
+*/
+program nestedIfWhile;
 
-int x = 1;
+int x = 10;
+int y = 0;
 
-while (True) {
-    if (True) {
-        x = 2;
+while (x > y) {
+    if (x > 6) {
+        x = x - 1;
+        y = y + 1;
     } else {
-        x = 3;
+        x = x - 2;
+        y = y - 1;
     }
 }
-
