@@ -180,10 +180,16 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // This register is no longer needed
         register.setAvailable();
 
-        // Visit the if and else blocks
+        // Visit the if block
         visit(ctx.block(0));
+
+        // Set the position of the start else block
         int elsePos = program.size() + 1;
-        visit(ctx.block(1));
+
+        // Visit the else block if there is one
+        if (ctx.block(1) != null) {
+            visit(ctx.block(1));
+        }
 
         // If there is an else block, emit a branch to the first else block instruction
         if (hasElse) {
