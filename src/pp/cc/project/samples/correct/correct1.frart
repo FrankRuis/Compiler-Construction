@@ -1,4 +1,13 @@
-// Regular comment
-int x = 3;
+// If statement and variable swap test
+int x = 1;
+int y = (1 + 1);
+int z = 0;
 
-x = 2;
+if (True) {
+    z = y;
+    y = x;
+    x = z;
+} else {
+    x = 0;
+    y = 0;
+}

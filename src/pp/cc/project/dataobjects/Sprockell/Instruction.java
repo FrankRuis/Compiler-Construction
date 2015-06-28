@@ -2,6 +2,8 @@ package pp.cc.project.dataobjects.Sprockell;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Frank
@@ -11,7 +13,7 @@ import java.util.List;
 public class Instruction {
     private Instr instruction;
     private List<Arg> args;
-    private String comment;
+    private Optional<String> comment;
 
     /**
      * Construct an instruction
@@ -30,6 +32,7 @@ public class Instruction {
     public Instruction(Instr instruction, List<Arg> args) {
         this.instruction = instruction;
         this.args = args;
+        this.comment = Optional.empty();
     }
 
     /**
@@ -51,13 +54,22 @@ public class Instruction {
      * @param comment The comment
      */
     public void setComment(String comment) {
-        this.comment = comment;
+        this.comment = Optional.of(comment);
     }
 
      /**
      * @return This instruction's comment
      */
     public String getComment() {
-        return comment != null ? comment : "";
+        return comment.orElse("");
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s%s%s%s",
+                instruction.toString(),
+                args.size() > 0 ? " " : "",
+                String.join(" ", args.stream().map(Arg::toString).collect(Collectors.toList())),
+                !comment.isPresent() ? "" : String.format(" --%s", comment.get()));
     }
 }

@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 import pp.cc.project.antlr.FrartellLexer;
 import pp.cc.project.antlr.FrartellParser;
-import pp.cc.project.dataobjects.Sprockell.Program;
+import pp.cc.project.dataobjects.Sprockell.*;
 import pp.cc.project.utils.FileUtils;
 
 import java.io.File;
@@ -32,5 +32,8 @@ public class SecondPassTest {
         FirstPassResult firstPassResult = new FirstPass().check(parseTree);
 
         Program program = new SecondPass().generate(parseTree, firstPassResult);
+
+        System.out.println("Printing program:");
+        System.out.println(program);
     }
 }

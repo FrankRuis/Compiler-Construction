@@ -19,17 +19,6 @@ import static org.junit.Assert.*;
  * @author Frank
  */
 public class FirstPassTest {
-
-    @Before
-    public void setUp() throws Exception {
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
     @Test
     public void testCheck() throws Exception {
         // Get the file contents
