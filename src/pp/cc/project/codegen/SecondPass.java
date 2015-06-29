@@ -256,8 +256,8 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Insert the branch instruction to the left of the second expression
         emitAt(branchPos, Instr.InvBranch, register,
                 new Target(Target.Type.Rel, new Constant(jumpTarget - branchPos)))
-                .setComment(String.format("relative jump to %d if %s contains the False value",
-                        jumpTarget,
+                .setComment(String.format("relative jump of %d if %s contains the False value",
+                        jumpTarget - branchPos,
                         register));
 
         // Get the current end of the program and add 1 for the jump instruction that we will emit later

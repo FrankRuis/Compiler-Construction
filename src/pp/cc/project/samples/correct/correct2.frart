@@ -13,7 +13,7 @@ int x = 0;
     int x = 0;
     x = -1;
 }
-// Scope is closed, redeclaration of x should no longer be in use
+// Scope is closed, redeclaration of x should no longer be in use so x should be 1
 
 // This should overwrite the redeclaration of x in memory
 int y = 0;
