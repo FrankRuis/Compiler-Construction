@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import pp.cc.project.antlr.FrartellLexer;
 import pp.cc.project.antlr.FrartellParser;
+import pp.cc.project.dataobjects.ParseException;
 import pp.cc.project.utils.FileUtils;
 import pp.cc.project.utils.ParseUtils;
 
@@ -25,7 +26,7 @@ public class FirstPassTest {
     @Test
     public void testCheck() throws Exception {
         // The file to test
-        File file = new File(FileUtils.getProjPath("samples/correct/correct1.frart"));
+        File file = new File(FileUtils.getProjPath("samples/incorrect/incorrect1.frart"));
 
         // Get the parse tree
         ParseTree parseTree = ParseUtils.getParseTree(file);
@@ -33,7 +34,11 @@ public class FirstPassTest {
         // Create a FirstPass object to start the type checking phase
         FirstPass firstPass = new FirstPass();
 
-        // Get the result of the type checking phase
-        FirstPassResult firstPassResult = firstPass.check(parseTree);
+        try {
+            // Get the result of the type checking phase
+            FirstPassResult firstPassResult = firstPass.check(parseTree);
+        } catch (ParseException e) {
+            e.getErrors().stream().forEach(System.err::println);
+        }
     }
 }

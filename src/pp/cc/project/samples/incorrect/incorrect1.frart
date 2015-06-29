@@ -1,7 +1,15 @@
-Int x = 0;
-int y = 7;
+// Test assignments to the wrong type
+program wrongTypes;
 
-while (y > 0) {
-    x = x + 1;
-    y = y - 1;
-}
+int x;
+bool y;
+int z[3] = [True, False];
+
+x = y;
+y = z;
+y = z[2];
+z = x;
+
+x = False;
+y = 7;
+z = 9;
