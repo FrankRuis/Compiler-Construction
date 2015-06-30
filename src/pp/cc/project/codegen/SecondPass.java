@@ -140,6 +140,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Set the loop position before the condition check
         int returnPos = program.size();
         Instruction conditionExpr = visit(ctx.expr());
+
         // Set the position for the jump instruction after the condition check
         int branchPos = program.size();
 
@@ -171,6 +172,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     @Override
     public Instruction visitIfStat(@NotNull FrartellParser.IfStatContext ctx) {
         Instruction ifExprResult = visit(ctx.expr());
+
         // Set the position for the branch instruction to right after the if expression
         int branchPos = program.size();
         Register register = getReg(ctx.expr());
@@ -229,6 +231,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     @Override
     public Instruction visitTernExpr(@NotNull FrartellParser.TernExprContext ctx) {
         Instruction condExprResult = visit(ctx.expr(0));
+
         // Set the position for the branch instruction to right after the if expression
         int branchPos = program.size();
         Register register = getReg(ctx.expr(0));
@@ -240,15 +243,15 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Visit the second expression and free its register
         visit(ctx.expr(1));
         Register register1 = getReg(ctx.expr(1));
-        register1.setAvailable();
+
+        // Set the register of the third expression to that of the second expression
+        setReg(ctx.expr(2), register1);
 
         // Set the position of the second expression
         int expr3Pos = program.size() + 1;
 
         // Visit the third expression and free its register
         visit(ctx.expr(2));
-        Register register2 = getReg(ctx.expr(1));
-        register2.setAvailable();
 
         // Add 1 to the expression position for the instruction we will emit later
         int jumpTarget = expr3Pos + 1;
@@ -267,6 +270,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         emitAt(expr3Pos, Instr.Jump,
                 new Target(Target.Type.Rel, new Constant(jumpTarget - expr3Pos)));
 
+        // Set the register to that of expression 3
         setReg(ctx, getReg(ctx.expr(2)));
 
         return condExprResult;
@@ -274,8 +278,21 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitAddExpr(@NotNull FrartellParser.AddExprContext ctx) {
-        Instruction expr0Result = visit(ctx.expr(0));
-        visit(ctx.expr(1));
+        // Get the lengths of the expression source intervals
+        int sintlen0 = ctx.expr(0).getSourceInterval().length();
+        int sintlen1 = ctx.expr(1).getSourceInterval().length();
+
+        // Initialize the result of the first expression
+        Instruction expr0Result;
+
+        // Visit compound expressions first to avoid running out of registers
+        if (sintlen0 > sintlen1) {
+            expr0Result = visit(ctx.expr(0));
+            visit(ctx.expr(1));
+        } else {
+            visit(ctx.expr(1));
+            expr0Result = visit(ctx.expr(0));
+        }
 
         // Assign registers for the left expression, right expression and target
         Register register0 = getReg(ctx.expr(0));
@@ -303,8 +320,21 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitMultExpr(@NotNull FrartellParser.MultExprContext ctx) {
-        Instruction expr0Result = visit(ctx.expr(0));
-        visit(ctx.expr(1));
+        // Get the lengths of the expression source intervals
+        int sintlen0 = ctx.expr(0).getSourceInterval().length();
+        int sintlen1 = ctx.expr(1).getSourceInterval().length();
+
+        // Initialize the result of the first expression
+        Instruction expr0Result;
+
+        // Visit compound expressions first to avoid running out of registers
+        if (sintlen0 > sintlen1) {
+            expr0Result = visit(ctx.expr(0));
+            visit(ctx.expr(1));
+        } else {
+            visit(ctx.expr(1));
+            expr0Result = visit(ctx.expr(0));
+        }
 
         // Assign registers for the left expression, right expression and target
         Register register0 = getReg(ctx.expr(0));
@@ -335,8 +365,21 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitPowExpr(@NotNull FrartellParser.PowExprContext ctx) {
-        Instruction expr0Result = visit(ctx.expr(0));
-        visit(ctx.expr(1));
+        // Get the lengths of the expression source intervals
+        int sintlen0 = ctx.expr(0).getSourceInterval().length();
+        int sintlen1 = ctx.expr(1).getSourceInterval().length();
+
+        // Initialize the result of the first expression
+        Instruction expr0Result;
+
+        // Visit compound expressions first to avoid running out of registers
+        if (sintlen0 > sintlen1) {
+            expr0Result = visit(ctx.expr(0));
+            visit(ctx.expr(1));
+        } else {
+            visit(ctx.expr(1));
+            expr0Result = visit(ctx.expr(0));
+        }
 
         // Assign registers for the left expression, right expression and target
         Register register0 = getReg(ctx.expr(0));
@@ -355,8 +398,21 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitBoolExpr(@NotNull FrartellParser.BoolExprContext ctx) {
-        Instruction expr0Result = visit(ctx.expr(0));
-        visit(ctx.expr(1));
+        // Get the lengths of the expression source intervals
+        int sintlen0 = ctx.expr(0).getSourceInterval().length();
+        int sintlen1 = ctx.expr(1).getSourceInterval().length();
+
+        // Initialize the result of the first expression
+        Instruction expr0Result;
+
+        // Visit compound expressions first to avoid running out of registers
+        if (sintlen0 > sintlen1) {
+            expr0Result = visit(ctx.expr(0));
+            visit(ctx.expr(1));
+        } else {
+            visit(ctx.expr(1));
+            expr0Result = visit(ctx.expr(0));
+        }
 
         // Assign registers for the left expression, right expression and target
         Register register0 = getReg(ctx.expr(0));
@@ -384,8 +440,21 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitCompExpr(@NotNull FrartellParser.CompExprContext ctx) {
-        Instruction expr0Result = visit(ctx.expr(0));
-        visit(ctx.expr(1));
+        // Get the lengths of the expression source intervals
+        int sintlen0 = ctx.expr(0).getSourceInterval().length();
+        int sintlen1 = ctx.expr(1).getSourceInterval().length();
+
+        // Initialize the result of the first expression
+        Instruction expr0Result;
+
+        // Visit compound expressions first to avoid running out of registers
+        if (sintlen0 > sintlen1) {
+            expr0Result = visit(ctx.expr(0));
+            visit(ctx.expr(1));
+        } else {
+            visit(ctx.expr(1));
+            expr0Result = visit(ctx.expr(0));
+        }
 
         // Assign registers for the left expression, right expression and target
         Register register0 = getReg(ctx.expr(0));
@@ -419,8 +488,21 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitEqExpr(@NotNull FrartellParser.EqExprContext ctx) {
-        Instruction expr0Result = visit(ctx.expr(0));
-        visit(ctx.expr(1));
+        // Get the lengths of the expression source intervals
+        int sintlen0 = ctx.expr(0).getSourceInterval().length();
+        int sintlen1 = ctx.expr(1).getSourceInterval().length();
+
+        // Initialize the result of the first expression
+        Instruction expr0Result;
+
+        // Visit compound expressions first to avoid running out of registers
+        if (sintlen0 > sintlen1) {
+            expr0Result = visit(ctx.expr(0));
+            visit(ctx.expr(1));
+        } else {
+            visit(ctx.expr(1));
+            expr0Result = visit(ctx.expr(0));
+        }
 
         // Assign registers for the left expression, right expression and target
         Register register0 = getReg(ctx.expr(0));
@@ -471,7 +553,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
         // Get the register with the expression result and assign a register to this expression
         Register register0 = getReg(ctx.expr());
-        Register register1 = getReg(ctx);
+        Register register1 = getReg(true, ctx);
 
         // Load the value for True in register1
         emit(Instr.Const, TRUE, register1);
@@ -586,10 +668,15 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
         // If the given parse tree node has no associated register
         if (reg == null) {
-            // Find an available register or get RegA if none are available
+            // Find an available register
             reg = userRegisters.values().stream()
                     .filter(Register::isAvailable)
-                    .findFirst().orElse(userRegisters.get(Reg.RegA));
+                    .findFirst().get();
+
+            // Throw an exception if there are no registers available
+            if (reg == null) {
+                throw new RuntimeException("Ran out of available registers.");
+            }
 
             // Add the register to the register map
             registers.put(node, reg);
@@ -610,10 +697,15 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
         // If the given parse tree node has no associated register or the associated register is the Zero register
         if (reg == null || (target && reg.getName().equals(Reg.Zero))) {
-            // Find an available register or get RegA if none are available
+            // Find an available register
             reg = userRegisters.values().stream()
                     .filter(Register::isAvailable)
-                    .findFirst().orElse(userRegisters.get(Reg.RegA));
+                    .findFirst().get();
+
+            // Throw an exception if there are no registers available
+            if (reg == null) {
+                throw new RuntimeException("Ran out of available registers.");
+            }
 
             // Add the register to the register map
             registers.put(node, reg);
