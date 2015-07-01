@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * @author Frank
+ *
+ * Custom exception class for parse exceptions
  */
 public class ParseException extends Exception {
     private List<String> errors;

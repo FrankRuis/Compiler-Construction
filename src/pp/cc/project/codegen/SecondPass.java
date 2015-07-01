@@ -285,7 +285,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Initialize the result of the first expression
         Instruction expr0Result;
 
-        // Visit compound expressions first to avoid running out of registers
+        // Visit larger compound expressions first to avoid running out of registers
         if (sintlen0 > sintlen1) {
             expr0Result = visit(ctx.expr(0));
             visit(ctx.expr(1));
@@ -302,10 +302,10 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Emit an instruction based on the type of operator
         switch (ctx.op.getType()) {
             case FrartellParser.MINUS:
-                emit(Instr.Compute, operatorof(Operator.Type.Sub), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.Sub), register0, register1, register2);
                 break;
             case FrartellParser.PLUS:
-                emit(Instr.Compute, operatorof(Operator.Type.Add), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.Add), register0, register1, register2);
                 break;
             default:
                 throw new RuntimeException(String.format("Unknown operator in add expression: %s", ctx.op.getText()));
@@ -327,7 +327,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Initialize the result of the first expression
         Instruction expr0Result;
 
-        // Visit compound expressions first to avoid running out of registers
+        // Visit larger compound expressions first to avoid running out of registers
         if (sintlen0 > sintlen1) {
             expr0Result = visit(ctx.expr(0));
             visit(ctx.expr(1));
@@ -344,13 +344,13 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Emit an instruction based on the type of operator
         switch (ctx.op.getType()) {
             case FrartellParser.MOD:
-                emit(Instr.Compute, operatorof(Operator.Type.Mod), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.Mod), register0, register1, register2);
                 break;
             case FrartellParser.MULT:
-                emit(Instr.Compute, operatorof(Operator.Type.Mul), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.Mul), register0, register1, register2);
                 break;
             case FrartellParser.DIV:
-                emit(Instr.Compute, operatorof(Operator.Type.Div), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.Div), register0, register1, register2);
                 break;
             default:
                 throw new RuntimeException(String.format("Unknown operator in add expression: %s", ctx.op.getText()));
@@ -372,7 +372,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Initialize the result of the first expression
         Instruction expr0Result;
 
-        // Visit compound expressions first to avoid running out of registers
+        // Visit larger compound expressions first to avoid running out of registers
         if (sintlen0 > sintlen1) {
             expr0Result = visit(ctx.expr(0));
             visit(ctx.expr(1));
@@ -387,7 +387,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         Register register2 = getReg(true, ctx);
 
         // Emit a compute instruction with the power operator
-        emit(Instr.Compute, operatorof(Operator.Type.Pow), register0, register1, register2);
+        emit(Instr.Compute, operatorOf(Operator.Type.Pow), register0, register1, register2);
 
         // These registers are no longer needed
         register0.setAvailable();
@@ -405,7 +405,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Initialize the result of the first expression
         Instruction expr0Result;
 
-        // Visit compound expressions first to avoid running out of registers
+        // Visit larger compound expressions first to avoid running out of registers
         if (sintlen0 > sintlen1) {
             expr0Result = visit(ctx.expr(0));
             visit(ctx.expr(1));
@@ -422,10 +422,10 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Emit an instruction based on the type of operator
         switch (ctx.op.getType()) {
             case FrartellParser.AND:
-                emit(Instr.Compute, operatorof(Operator.Type.And), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.And), register0, register1, register2);
                 break;
             case FrartellParser.OR:
-                emit(Instr.Compute, operatorof(Operator.Type.Or), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.Or), register0, register1, register2);
                 break;
             default:
                 throw new RuntimeException(String.format("Unknown operator in boolean expression: %s", ctx.op.getText()));
@@ -447,7 +447,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Initialize the result of the first expression
         Instruction expr0Result;
 
-        // Visit compound expressions first to avoid running out of registers
+        // Visit larger compound expressions first to avoid running out of registers
         if (sintlen0 > sintlen1) {
             expr0Result = visit(ctx.expr(0));
             visit(ctx.expr(1));
@@ -464,18 +464,19 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Emit an instruction based on the type of operator
         switch (ctx.op.getType()) {
             case FrartellParser.LW:
-                emit(Instr.Compute, operatorof(Operator.Type.Lt), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.Lt), register0, register1, register2);
                 break;
             case FrartellParser.GR:
-                emit(Instr.Compute, operatorof(Operator.Type.Gt), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.Gt), register0, register1, register2);
                 break;
             case FrartellParser.LWEQ:
-                emit(Instr.Compute, operatorof(Operator.Type.LtE), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.LtE), register0, register1, register2);
                 break;
             case FrartellParser.GREQ:
-                emit(Instr.Compute, operatorof(Operator.Type.GtE), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.GtE), register0, register1, register2);
                 break;
             default:
+                // Throw a runtime exception since this is not something we can recover from
                 throw new RuntimeException(String.format("Unknown operator in boolean expression: %s", ctx.op.getText()));
         }
 
@@ -495,7 +496,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Initialize the result of the first expression
         Instruction expr0Result;
 
-        // Visit compound expressions first to avoid running out of registers
+        // Visit larger compound expressions first to avoid running out of registers
         if (sintlen0 > sintlen1) {
             expr0Result = visit(ctx.expr(0));
             visit(ctx.expr(1));
@@ -512,12 +513,13 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Emit an instruction based on the type of operator
         switch (ctx.op.getType()) {
             case FrartellParser.EQ:
-                emit(Instr.Compute, operatorof(Operator.Type.Equal), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.Equal), register0, register1, register2);
                 break;
             case FrartellParser.NEQ:
-                emit(Instr.Compute, operatorof(Operator.Type.NEq), register0, register1, register2);
+                emit(Instr.Compute, operatorOf(Operator.Type.NEq), register0, register1, register2);
                 break;
             default:
+                // Throw a runtime exception since this is not something we can recover from
                 throw new RuntimeException(String.format("Unknown operator in boolean expression: %s", ctx.op.getText()));
         }
 
@@ -538,7 +540,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         Register register2 = getReg(true, ctx);
 
         // Subtract the result of the expression from the zero register and store it in the target register
-        emit(Instr.Compute, operatorof(Operator.Type.Sub), register0, register1, register2);
+        emit(Instr.Compute, operatorOf(Operator.Type.Sub), register0, register1, register2);
 
         // These registers are no longer needed
         register0.setAvailable();
@@ -559,7 +561,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         emit(Instr.Const, TRUE, register1);
 
         // Xor the expression result with the True value and store it in this expression's register
-        emit(Instr.Compute, operatorof(Operator.Type.Xor), register0, register1, register1);
+        emit(Instr.Compute, operatorOf(Operator.Type.Xor), register0, register1, register1);
 
         // We don't need this register anymore
         register0.setAvailable();
@@ -675,6 +677,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
             // Throw an exception if there are no registers available
             if (reg == null) {
+                // Throw a runtime exception since this is not something we can recover from
                 throw new RuntimeException("Ran out of available registers.");
             }
 
@@ -704,6 +707,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
             // Throw an exception if there are no registers available
             if (reg == null) {
+                // Throw a runtime exception since this is not something we can recover from
                 throw new RuntimeException("Ran out of available registers.");
             }
 
@@ -759,7 +763,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
      * @param type The type of operator
      * @return The specified operator
      */
-    public Operator operatorof(Operator.Type type) {
+    public Operator operatorOf(Operator.Type type) {
         return new Operator(type);
     }
 }

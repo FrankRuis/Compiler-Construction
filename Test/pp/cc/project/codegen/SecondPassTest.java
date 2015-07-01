@@ -1,16 +1,13 @@
 package pp.cc.project.codegen;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
-import pp.cc.project.antlr.FrartellLexer;
-import pp.cc.project.antlr.FrartellParser;
 import pp.cc.project.dataobjects.Sprockell.*;
 import pp.cc.project.utils.FileUtils;
 import pp.cc.project.utils.ParseUtils;
+import pp.cc.project.utils.RuntimeUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
 
 import static org.junit.Assert.*;
@@ -36,6 +33,14 @@ public class SecondPassTest {
         Program program = new SecondPass().generate(parseTree, firstPassResult);
 
         // Create a haskell file from the sprockell program
-        FileUtils.createSprockellFile(program);
+        File sprogram = FileUtils.createSprockellFile(program);
+
+        // Compile the sprockell program and get the exit code
+        int exitCode = RuntimeUtils.compileSprockell(sprogram, true);
+
+        // Make sure the compilation was successful
+        if (exitCode != 0) {
+            fail("The compilation did not finish successfully.");
+        }
     }
 }

@@ -79,8 +79,9 @@ public class FileUtils {
      * Create a haskell file with the given sprockell program<br>
      * File is saved in the Generated Programs folder
      * @param program The program to convert to a haskell file
+     * @return The created file or null if something went wrong
      */
-    public static void createSprockellFile(Program program) {
+    public static File createSprockellFile(Program program) {
         // Path to the generated programs folder
         Path path = Paths.get(getParent(getBase()), "Generated Programs");
 
@@ -95,10 +96,14 @@ public class FileUtils {
 
         try {
             // Create the file and write the program to it
-            new File(path.toString());
+            File file = new File(path.toString());
             Files.write(path, program.toString().getBytes());
+
+            return file;
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 }
