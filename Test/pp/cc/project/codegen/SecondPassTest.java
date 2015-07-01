@@ -1,7 +1,6 @@
 package pp.cc.project.codegen;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
 import pp.cc.project.dataobjects.ParseException;
 import pp.cc.project.dataobjects.Sprockell.*;

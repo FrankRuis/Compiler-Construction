@@ -3,7 +3,7 @@
  x = 2;
  y = 2;
 */
-program nestedIfWhile;
+program nestedIfWhileTest;
 
 int x = 10;
 int y = 0;

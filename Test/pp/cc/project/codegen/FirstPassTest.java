@@ -19,7 +19,7 @@ public class FirstPassTest {
     @Test
     public void testCheck() throws Exception {
         // The file to test
-        File file = new File(FileUtils.getProjPath("samples/incorrect/incorrect1.frart"));
+        File file = new File(FileUtils.getProjPath("samples/incorrect/WrongTypesTest.frart"));
 
         // Get the parse tree
         ParseTree parseTree = ParseUtils.getParseTree(file);

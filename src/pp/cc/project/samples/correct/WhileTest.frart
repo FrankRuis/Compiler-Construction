@@ -3,7 +3,7 @@
  x = 5;
  y = 35;
 */
-program testWhile;
+program whileTest;
 
 int x = 10;
 int y;

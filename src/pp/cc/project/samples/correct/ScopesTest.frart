@@ -10,8 +10,8 @@ int x = 0;
     x = 1;
 
     // Redeclare x, should not overwrite x in the outer scope
-    int x = 0;
-    x = -1;
+    bool x = False;
+    x = True;
 }
 // Scope is closed, redeclaration of x should no longer be in use so x should be 1
 
