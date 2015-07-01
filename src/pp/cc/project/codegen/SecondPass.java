@@ -7,6 +7,8 @@ import pp.cc.project.antlr.FrartellBaseVisitor;
 import pp.cc.project.antlr.FrartellParser;
 import pp.cc.project.dataobjects.Sprockell.Register.Reg;
 import pp.cc.project.dataobjects.Sprockell.*;
+import pp.cc.project.dataobjects.type.ArrayType;
+import pp.cc.project.dataobjects.type.Type;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -92,6 +94,9 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     public Instruction visitDeclStat(@NotNull FrartellParser.DeclStatContext ctx) {
         Instruction exprResult = null;
 
+        // Check if the target is an array
+        boolean isArray = getType(ctx.decltarget().getChild(0)) instanceof ArrayType;
+
         // Variables may be initialized with no value
         if (ctx.expr() != null) {
             exprResult = visit(ctx.expr());
@@ -101,11 +106,14 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
             // Get the offset of the variable
             Constant offset = getOffset(ctx.decltarget());
 
-            // Store the expression result in the target variable
-            emit(Instr.Store, register, new MemAddr(offset))
-                    .setComment(String.format("store the contents of %s to variable %s",
-                            register,
-                            ctx.decltarget().getText()));
+            // The result of an array expression should not be stored
+            if (!isArray) {
+                // Store the expression result in the target variable
+                emit(Instr.Store, register, new MemAddr(offset))
+                        .setComment(String.format("store the contents of %s to variable %s",
+                                register,
+                                ctx.decltarget().getText()));
+            }
 
             // This register is no longer needed
             register.setAvailable();
@@ -116,23 +124,83 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitAssignStat(@NotNull FrartellParser.AssignStatContext ctx) {
-        visit(ctx.expr());
+        // Check if the target is an array
+        boolean isArray = ctx.target().getChildCount() > 1;
 
-        // Get the register containing the result of the expression
-        Register register = getReg(ctx.expr());
         // Get the offset of the variable
         Constant offset = getOffset(ctx.target());
 
-        // Store the result of the expression in the target variable
-        Instruction storeInstr = emit(Instr.Store, register, new MemAddr(offset));
-        storeInstr.setComment(String.format("store the contents of %s to variable %s",
-                register,
-                ctx.target().getText()));
+        // Generate the store instruction differently for an array and a normal target
+        Instruction storeInstr;
+        if (!isArray) {
+            // Visit the expression
+            visit(ctx.expr());
 
-        // This register is no longer needed
-        register.setAvailable();
+            // Get the register containing the result of the expression
+            Register register = getReg(ctx.expr());
+
+            // Store the result of the expression in the target variable
+            storeInstr = emit(Instr.Store, register, new MemAddr(offset));
+            storeInstr.setComment(String.format("store the contents of %s to variable %s",
+                    register,
+                    ctx.target().getText()));
+
+            // This register is no longer needed
+            register.setAvailable();
+        } else {
+            // Visit the target expression
+            visit(ctx.target());
+
+            // Get the offset via the result of the array target expression
+            Register arrayRegister = getReg(ctx.target());
+            arrayRegister.setUnavailable();
+
+            // Assign a register to this statement
+            Register register1 = getReg(ctx);
+            register1.setUnavailable();
+
+            // Store the size of an integer in bytes in register 1
+            emit(Instr.Const, new Constant(Integer.BYTES), register1);
+
+            // Multiply the result of the expression by the size of an integer in bytes
+            emit(Instr.Compute, operatorOf(Operator.Type.Mul), arrayRegister, register1, register1);
+
+            // Load the offset of the array to register 2
+            emit(Instr.Const, offset, arrayRegister);
+
+            // Add the offset to the earlier expression
+            emit(Instr.Compute, operatorOf(Operator.Type.Add), register1, arrayRegister, arrayRegister);
+
+            // Visit the expression
+            visit(ctx.expr());
+
+            // Get the register containing the result of the expression
+            Register register = getReg(ctx.expr());
+
+            // Store the result of the expression in the dereferenced location
+            storeInstr = emit(Instr.Store, register, new MemAddr(arrayRegister));
+            storeInstr.setComment(String.format("store the contents of %s to variable %s",
+                    arrayRegister,
+                    ctx.target().getText()));
+
+            // Free the registers
+            register.setAvailable();
+            register1.setAvailable();
+            arrayRegister.setAvailable();
+        }
 
         return storeInstr;
+    }
+
+    @Override
+    public Instruction visitArrayTarget(@NotNull FrartellParser.ArrayTargetContext ctx) {
+        // Visit the expression
+        Instruction exprResult = visit(ctx.expr());
+
+        // Set the register to that of the expression
+        setReg(ctx, getReg(ctx.expr()));
+
+        return exprResult;
     }
 
     @Override
@@ -226,6 +294,63 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         }
 
         return ifExprResult;
+    }
+
+    @Override
+    public Instruction visitArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx) {
+        // Get the starting offset of the array
+        int offset = getOffset(ctx.getParent().getChild(1)).getValue();
+
+        // Store the result of the first expression to the right memory address
+        Instruction exprResult = visit(ctx.expr(0));
+        Register register = getReg(ctx.expr(0));
+        emit(Instr.Store, register, new MemAddr(new Constant(offset)));
+        register.setAvailable();
+
+        // Go through the remaining expressions and store their values to the right memory addresses
+        ctx.expr().stream().filter(expr -> expr != ctx.expr(0)).forEach(expr -> {
+            visit(expr);
+            Register reg = getReg(expr);
+            emit(Instr.Store, reg,
+                    new MemAddr(new Constant(offset + (ctx.expr().indexOf(expr) * Integer.BYTES))));
+            reg.setAvailable();
+        });
+
+        return exprResult;
+    }
+
+    @Override
+    public Instruction visitIndexExpr(@NotNull FrartellParser.IndexExprContext ctx) {
+        Instruction exprResult = visit(ctx.expr());
+
+        // Get a register for the expression, this node and a second register for the expression that can not be the Zero register
+        Register register0 = getReg(ctx.expr());
+        Register register1 = getReg(true, ctx);
+        Register register2 = getReg(true, ctx.expr());
+
+        // Store the size of an integer in bytes in register 1
+        emit(Instr.Const, new Constant(Integer.BYTES), register1);
+
+        // Multiply the result of the expression by the size of an integer in bytes
+        emit(Instr.Compute, operatorOf(Operator.Type.Mul), register0, register1, register1);
+
+        // Load the offset of the array to register 2
+        emit(Instr.Const, getOffset(ctx), register2);
+
+        // Add the offset to the earlier expression
+        emit(Instr.Compute, operatorOf(Operator.Type.Add), register1, register2, register2);
+
+        // Dereference the register containing the result of the computations and load it to register 2
+        emit(Instr.Load, new MemAddr(register2), register2);
+
+        // We don't need these registers anymore
+        register0.setAvailable();
+        register1.setAvailable();
+
+        // Set this node's register to the result register
+        setReg(ctx, register2);
+
+        return exprResult;
     }
 
     @Override
@@ -747,6 +872,15 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
      */
     public Constant getOffset(ParseTree node) {
         return new Constant(this.result.getOffset(node));
+    }
+
+    /**
+     * Return the type assiciated with the given parse tree node
+     * @param node The parse tree node
+     * @return The associated type
+     */
+    public Type getType(ParseTree node) {
+        return result.getType(node);
     }
 
     /**

@@ -29,6 +29,13 @@ public class Constant extends Arg {
         this.value = (int) c;
     }
 
+    /**
+     * @return this constant's value
+     */
+    public int getValue() {
+        return this.value;
+    }
+
     @Override
     public String toString() {
         return isChar ? String.format("(ord '%c')", (char) value) : String.format("(%d)", value);

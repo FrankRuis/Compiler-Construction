@@ -19,9 +19,10 @@ import static org.junit.Assert.*;
 /**
  * @author Frank
  *
- * Test the sprockell program generation
+ * Test the sprockell program generation and compilation
  */
 public class SecondPassTest {
+    // The base directory for the correct Frartell files
     private final Path BASE_CORRECT;
 
     /**
