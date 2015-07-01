@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 
 /**
  * @author Frank
@@ -38,14 +39,9 @@ public class RuntimeUtils {
                 }
             }
 
-            // Wait for the process to finish
-            int exitCode = process.waitFor();
-
-            // return the exit code
-            return exitCode;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+            // Wait for the process to finish and return the exit code
+            return process.waitFor();
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
