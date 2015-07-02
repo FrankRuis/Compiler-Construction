@@ -1,0 +1,18 @@
+// Captital int
+Int x = 0;
+
+// No expression
+int y = ;
+
+// While statement without condition
+while () {
+
+}
+
+// No preceding if statement
+else {
+
+}
+
+// No closing of block
+if (True) { int x = 0;

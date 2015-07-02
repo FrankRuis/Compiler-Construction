@@ -2,17 +2,22 @@ package pp.cc.project.codegen;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
-import pp.cc.project.dataobjects.ParseException;
+import pp.cc.project.Exceptions.ErrorListener;
+import pp.cc.project.Exceptions.ParseException;
+import pp.cc.project.Exceptions.RunException;
 import pp.cc.project.dataobjects.Sprockell.*;
 import pp.cc.project.utils.FileUtils;
 import pp.cc.project.utils.ParseUtils;
 import pp.cc.project.utils.RuntimeUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -25,11 +30,21 @@ public class SecondPassTest {
     // The base directory for the correct Frartell files
     private final Path BASE_CORRECT;
 
+    // Map containing the expected output for each sample program
+    private Map<String, String> expectedOutput;
+
     /**
      * Constructor, initialize the path to the correct samples
      */
     public SecondPassTest() {
-        BASE_CORRECT = Paths.get(FileUtils.getPath("pp/cc/project/samples/correct"));
+        expectedOutput = new HashMap<>();
+        BASE_CORRECT = Paths.get(FileUtils.getProjPath("samples/correct"));
+
+        // Fill the expectedOutput map with the expected output for each program
+        expectedOutput.put("reverseArrayTest", "54321");
+        expectedOutput.put("nestedIfWhileTest", "22");
+        expectedOutput.put("swapTest", "21");
+        expectedOutput.put("scopesTest", "0103");
     }
 
     @Test
@@ -38,7 +53,15 @@ public class SecondPassTest {
             // Go through all files in the correct files folder
             Files.walk(BASE_CORRECT).filter(Files::isRegularFile).forEach(file -> {
                 // Get the parse tree
-                ParseTree parseTree = ParseUtils.getParseTree(file.toFile());
+                ParseTree parseTree = null;
+                try {
+                    ErrorListener errorListener = new ErrorListener();
+                    parseTree = ParseUtils.getParseTree(file.toFile(), errorListener);
+                    errorListener.throwErrors();
+                } catch (ParseException e) {
+                    e.getErrors().forEach(System.err::println);
+                    fail(String.format("%s was not parsed correctly.", file.getFileName()));
+                }
 
                 // Get the result of the type checking phase
                 FirstPassResult firstPassResult = null;
@@ -60,16 +83,25 @@ public class SecondPassTest {
 
                 // Make sure the compilation was successful
                 if (exitCode != 0) {
-                    fail("The compilation did not finish successfully.");
+                    fail(String.format("%s did not compile successfully.", program.getName()));
                 }
 
 
-                // Run the compiled program and get the exit code
-                exitCode = RuntimeUtils.runSprockell(sprogram, true);
+                // Run the compiled program and check the output if there is any
+                try {
+                    BufferedReader reader = RuntimeUtils.runSprockell(sprogram);
 
-                // Make sure the program was executed successfully
-                if (exitCode != 0) {
-                    fail("The program did not execute successfully.");
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        System.out.printf("Output: %s%n", line);
+
+                        // Make sure the output is as expected
+                        assertEquals(line, expectedOutput.get(program.getName()));
+                    }
+                } catch (RunException e) {
+                    fail(String.format("%s did not execute successfully.", program.getName()));
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             });
         } catch (IOException e) {

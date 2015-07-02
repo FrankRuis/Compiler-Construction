@@ -1,4 +1,4 @@
-package pp.cc.project.dataobjects;
+package pp.cc.project.Exceptions;
 
 import java.util.List;
 

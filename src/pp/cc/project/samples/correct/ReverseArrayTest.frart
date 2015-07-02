@@ -11,6 +11,7 @@ while (i < (length / 2)) {
     i = i + 1;
 }
 
+// Print the array
 i = 0;
 while (i < 5) {
     print(z[i]);

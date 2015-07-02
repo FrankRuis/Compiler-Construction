@@ -3,7 +3,7 @@ package pp.cc.project.dataobjects;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import pp.cc.project.dataobjects.Scopes;
+import pp.cc.project.codegen.Scopes;
 import pp.cc.project.dataobjects.type.*;
 
 /**

@@ -27,6 +27,9 @@ public class TestLexer {
             assert(yields(scan("whi leif var_X \"String\""), FrartellLexer.ID, FrartellLexer.ID,
                     FrartellLexer.ID, FrartellLexer.STRING));
             assert(yields(scan("01234x123_5hX"), FrartellLexer.INTEGER, FrartellLexer.INTEGER, FrartellLexer.ID));
+            assert(yields(scan("if while else print return"), FrartellLexer.IF, FrartellLexer.WHILE, FrartellLexer.ELSE,
+                    FrartellLexer.PRINT, FrartellLexer.RETURN));
+
 
             wrong("@unknown symbol");
             wrong("'Single quote string'");
@@ -35,7 +38,7 @@ public class TestLexer {
             correct("while if { } else True False x");
             correct("var_X 7841");
             correct("aA_2134_asd321_;");
-            correct("a ? b : c;");
+            correct("(a) ? (b + c) : (2 * d);");
             correct("[\"a\",\"b\"]");
         } catch (Exception e) {
             fail("Failed to parse a string that should be parsed correctly.");

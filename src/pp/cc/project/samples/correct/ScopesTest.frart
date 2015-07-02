@@ -10,13 +10,18 @@ int x = 0;
     x = 1;
 
     // Redeclare x, should not overwrite x in the outer scope
-    bool x = False;
-    x = True;
+    bool x = True;
+    x = False;
+
+    print(x);
 }
 // Scope is closed, redeclaration of x should no longer be in use so x should be 1
+print(x);
 
 // This should overwrite the redeclaration of x in memory
 int y = 0;
+print(y);
 
 // Set x to 3
 x = 3;
+print(x);

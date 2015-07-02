@@ -1,4 +1,4 @@
-package pp.cc.project.dataobjects;
+package pp.cc.project.codegen;
 
 import pp.cc.project.dataobjects.type.Type;
 

@@ -9,3 +9,6 @@ if (x != y) {
     x = y;
     y = z;
 }
+
+print(x);
+print(y);

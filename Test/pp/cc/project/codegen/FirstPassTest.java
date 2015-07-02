@@ -2,7 +2,7 @@ package pp.cc.project.codegen;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
-import pp.cc.project.dataobjects.ParseException;
+import pp.cc.project.Exceptions.ParseException;
 import pp.cc.project.utils.FileUtils;
 import pp.cc.project.utils.ParseUtils;
 
@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  */
 public class FirstPassTest {
     @Test
-    public void testCheck() throws Exception {
+    public void testWrongTypes() {
         // The file to test
         File file = new File(FileUtils.getProjPath("samples/incorrect/WrongTypesTest.frart"));
 
@@ -27,12 +27,20 @@ public class FirstPassTest {
         // Create a FirstPass object to start the type checking phase
         FirstPass firstPass = new FirstPass();
 
+        // Start the type checking phase
         try {
-            // Start the type checking phase
             firstPass.check(parseTree);
         } catch (ParseException e) {
-            e.getErrors().stream().forEach(System.err::println);
-            fail("Errors occurred while parsing.");
+            System.out.println("The following errors occurred: ");
+            e.getErrors().forEach(System.out::println);
+
+            // Make sure the right amount of errors occurred
+            assert(e.getErrors().size() == 9);
+
+            // Exception expected, skip the fail
+            return;
         }
+
+        fail(String.format("%s passed the type checking phase but shouldn't.", file.getName()));
     }
 }

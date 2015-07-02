@@ -53,6 +53,9 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         // Call the visitor methods
         tree.accept(this);
 
+        // Emit one nop so the simulation does not stop before processing the last print statement
+        emit(Instr.Nop);
+
         // Emit the end program instruction
         emit(Instr.EndProg);
 
@@ -209,9 +212,6 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         Instruction exprResult = visit(ctx.expr());
         Register register = getReg(ctx.expr());
 
-        // For some reason printing does not work without a nop first
-        emit(Instr.Nop);
-
         // Write the result of the expression to debugio
         emit(Instr.Write, register, new MemAddr("debugio"));
 
@@ -363,6 +363,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
         register1.setAvailable();
 
         // Set this node's register to the result register
+        register2.setUnavailable();
         setReg(ctx, register2);
 
         return exprResult;

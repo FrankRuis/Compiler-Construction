@@ -7,9 +7,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import pp.cc.project.antlr.FrartellBaseListener;
 import pp.cc.project.antlr.FrartellParser;
-import pp.cc.project.dataobjects.ParseException;
-import pp.cc.project.dataobjects.Scope;
-import pp.cc.project.dataobjects.Scopes;
+import pp.cc.project.Exceptions.ParseException;
 import pp.cc.project.dataobjects.type.ArrayType;
 import pp.cc.project.dataobjects.type.NoneType;
 import pp.cc.project.dataobjects.type.StringType;
@@ -194,6 +192,7 @@ public class FirstPass extends FrartellBaseListener {
             addError(ctx, "Not all elements of %s are of the same type.", ctx.getText());
         }
 
+        setEntry(ctx, ctx);
         setType(ctx, exprType);
     }
 
