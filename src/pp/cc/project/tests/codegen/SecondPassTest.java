@@ -1,14 +1,14 @@
 package pp.cc.project.tests.codegen;
 
+import junit.framework.TestCase;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.junit.Test;
 import pp.cc.project.Exceptions.ErrorListener;
 import pp.cc.project.Exceptions.ParseException;
 import pp.cc.project.Exceptions.RunException;
 import pp.cc.project.codegen.FirstPass;
 import pp.cc.project.codegen.FirstPassResult;
 import pp.cc.project.codegen.SecondPass;
-import pp.cc.project.dataobjects.Sprockell.*;
+import pp.cc.project.dataobjects.sprockell.*;
 import pp.cc.project.utils.FileUtils;
 import pp.cc.project.utils.ParseUtils;
 import pp.cc.project.utils.RuntimeUtils;
@@ -22,14 +22,12 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
-
 /**
  * @author Frank
  *
  * Test the sprockell program generation and compilation
  */
-public class SecondPassTest {
+public class SecondPassTest extends TestCase {
     // The base directory for the correct Frartell files
     private final Path BASE_CORRECT;
 
@@ -49,10 +47,11 @@ public class SecondPassTest {
         expectedOutput.put("swapTest", "21");
         expectedOutput.put("scopesTest", "0103");
         expectedOutput.put("ternaryTest", "14");
+        expectedOutput.put("whileTest", "535");
+        expectedOutput.put("compoundTest", "7205040");
     }
 
-    @Test
-    public void secondPassTest() {
+    public void testSecondPass() {
         try {
             // Go through all files in the correct files folder
             Files.walk(BASE_CORRECT).filter(Files::isRegularFile).forEach(file -> {
@@ -91,14 +90,13 @@ public class SecondPassTest {
                     fail(String.format("%s did not compile successfully.", program.getName()));
                 }
 
-
                 // Run the compiled program and check the output if there is any
                 try {
                     BufferedReader reader = RuntimeUtils.runSprockell(sprogram);
 
                     String line = null;
                     while (reader != null && (line = reader.readLine()) != null) {
-                        System.out.printf("Output: %s%n", line);
+                        System.out.printf("Output of %s: %s%n%n", program.getName(), line);
 
                         // Make sure the output is as expected
                         assertEquals(line, expectedOutput.get(program.getName()));

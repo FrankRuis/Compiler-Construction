@@ -1,7 +1,7 @@
 package pp.cc.project.tests.codegen;
 
+import junit.framework.TestCase;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.junit.Test;
 import pp.cc.project.Exceptions.ParseException;
 import pp.cc.project.codegen.FirstPass;
 import pp.cc.project.utils.FileUtils;
@@ -16,8 +16,7 @@ import static org.junit.Assert.*;
  *
  * Test the type checking phase
  */
-public class FirstPassTest {
-    @Test
+public class FirstPassTest extends TestCase {
     public void testWrongTypes() {
         // The file to test
         File file = new File(FileUtils.getProjPath("samples/incorrect/WrongTypesTest.frart"));
@@ -36,7 +35,7 @@ public class FirstPassTest {
             e.getErrors().forEach(System.out::println);
 
             // Make sure the right amount of errors occurred
-            assert(e.getErrors().size() == 9);
+            assertEquals(9, e.getErrors().size());
 
             // Exception expected, skip the fail
             return;

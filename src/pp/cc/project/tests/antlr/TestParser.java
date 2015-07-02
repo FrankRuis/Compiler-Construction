@@ -1,7 +1,9 @@
 package pp.cc.project.tests.antlr;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import junit.framework.TestCase;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 import pp.cc.project.Exceptions.ErrorListener;
@@ -19,7 +21,7 @@ import java.nio.file.Paths;
  *
  * Test the parser on correct and incorrect Frartell programs
  */
-public class TestParser {
+public class TestParser extends TestCase {
     private final Path BASE_CORRECT;
     private final Path BASE_WRONG;
 
@@ -31,19 +33,17 @@ public class TestParser {
         BASE_WRONG = Paths.get(FileUtils.getPath("pp/cc/project/samples/wrongparsing"));
     }
 
-    @Test
     public void testCorrectFiles() {
         try {
             // Go through all files in the correct files folder
             Files.walk(BASE_CORRECT).filter(Files::isRegularFile).forEach(file -> {
                 // Get the parse tree
-                ParseTree parseTree = null;
                 try {
                     ErrorListener errorListener = new ErrorListener();
-                    parseTree = ParseUtils.getParseTree(file.toFile(), errorListener);
+                    ParseUtils.getParseTree(file.toFile(), errorListener);
                     errorListener.throwErrors();
                 } catch (ParseException e) {
-                    e.getErrors().forEach(System.err::println);
+                    e.getErrors().forEach(System.out::println);
                     fail(String.format("%s was not parsed correctly.", file.getFileName()));
                 }
             });
@@ -52,25 +52,27 @@ public class TestParser {
         }
     }
 
-    @Test
     public void testWrongFiles() {
         try {
             // Go through all files in the correct files folder
             Files.walk(BASE_WRONG).filter(Files::isRegularFile).forEach(file -> {
-                boolean errors = false;
-
                 // Get the parse tree
-                ParseTree parseTree = null;
                 try {
                     ErrorListener errorListener = new ErrorListener();
-                    parseTree = ParseUtils.getParseTree(file.toFile(), errorListener);
+                    ParseUtils.getParseTree(file.toFile(), errorListener);
                     errorListener.throwErrors();
                 } catch (ParseException e) {
+                    System.out.println("The following errors occurred: ");
+                    e.getErrors().forEach(System.out::println);
+
+                    // Make sure the right amount of errors occurred
+                    assertEquals(5, e.getErrors().size());
+
                     // Expected
-                    errors = true;
+                    return;
                 }
 
-                if (!errors) fail(String.format("%s was parsed correctly but should have failed.", file.getFileName()));
+                fail(String.format("%s was parsed correctly but should have failed.", file.getFileName()));
             });
         } catch (IOException e) {
             e.printStackTrace();

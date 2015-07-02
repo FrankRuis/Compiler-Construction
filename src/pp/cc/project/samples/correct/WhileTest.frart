@@ -12,3 +12,6 @@ while (x > 5) {
     x = x - 1;
     y = y + x;
 }
+
+print(x);
+print(y);

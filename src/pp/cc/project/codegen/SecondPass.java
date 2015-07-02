@@ -5,8 +5,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import pp.cc.project.antlr.FrartellBaseVisitor;
 import pp.cc.project.antlr.FrartellParser;
-import pp.cc.project.dataobjects.Sprockell.Register.Reg;
-import pp.cc.project.dataobjects.Sprockell.*;
+import pp.cc.project.dataobjects.sprockell.Register.Reg;
+import pp.cc.project.dataobjects.sprockell.*;
 import pp.cc.project.dataobjects.type.ArrayType;
 import pp.cc.project.dataobjects.type.Type;
 

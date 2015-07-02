@@ -45,8 +45,10 @@ public class ParseUtils {
 
         // Convert the file contents to a token stream
         Lexer lexer = new FrartellLexer(new ANTLRInputStream(contents));
+        lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
         FrartellParser parser = new FrartellParser(new CommonTokenStream(lexer));
+        parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
 
         // Return the parse tree
