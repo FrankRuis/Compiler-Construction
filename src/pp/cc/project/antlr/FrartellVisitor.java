@@ -73,6 +73,13 @@ public interface FrartellVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlockStat(@NotNull FrartellParser.BlockStatContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code printStat}
+	 * labeled alternative in {@link FrartellParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrintStat(@NotNull FrartellParser.PrintStatContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code arrayExpr}
 	 * labeled alternative in {@link FrartellParser#expr}.
 	 * @param ctx the parse tree

@@ -204,6 +204,21 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
     }
 
     @Override
+    public Instruction visitPrintStat(@NotNull FrartellParser.PrintStatContext ctx) {
+        // Visit the expression
+        Instruction exprResult = visit(ctx.expr());
+        Register register = getReg(ctx.expr());
+
+        // For some reason printing does not work without a nop first
+        emit(Instr.Nop);
+
+        // Write the result of the expression to debugio
+        emit(Instr.Write, register, new MemAddr("debugio"));
+
+        return exprResult;
+    }
+
+    @Override
     public Instruction visitWhileStat(@NotNull FrartellParser.WhileStatContext ctx) {
         // Set the loop position before the condition check
         int returnPos = program.size();

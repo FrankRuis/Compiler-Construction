@@ -11,6 +11,7 @@ public class MemAddr extends Arg {
     private Type type;
     private Optional<Register> register;
     private Optional<Constant> constant;
+    private Optional<String> name;
 
     /**
      * Construct a MemAddr object of the type Deref
@@ -20,7 +21,8 @@ public class MemAddr extends Arg {
         super(Arg.Type.MemAddr);
         this.type = Type.Deref;
         this.register = Optional.of(register);
-        constant = Optional.empty();
+        this.name = Optional.empty();
+        this.constant = Optional.empty();
     }
 
     /**
@@ -31,7 +33,20 @@ public class MemAddr extends Arg {
         super(Arg.Type.MemAddr);
         this.type = Type.Addr;
         this.constant = Optional.of(constant);
-        register = Optional.empty();
+        this.name = Optional.empty();
+        this.register = Optional.empty();
+    }
+
+    /**
+     * Construct a MemAddr object of the type Name
+     * @param name The variable name for the memory address
+     */
+    public MemAddr(String name) {
+        super(Arg.Type.MemAddr);
+        this.type = Type.Name;
+        this.constant = Optional.empty();
+        this.register = Optional.empty();
+        this.name = Optional.of(name);
     }
 
     /**
@@ -43,9 +58,9 @@ public class MemAddr extends Arg {
 
     @Override
     public String toString() {
-        return String.format("(%s %s)",
-                type,
-                register.isPresent() ? register.get() : constant.get());
+        return String.format("(%s%s)",
+                name.isPresent() ? "" : type + " ",
+                register.isPresent() ? register.get() : constant.isPresent() ? constant.get() : name.get());
     }
 
     /**
@@ -59,6 +74,10 @@ public class MemAddr extends Arg {
         /**
          * Local or shared memory address stored at the given register (Deref Register)
          */
-        Deref
+        Deref,
+        /**
+         * Variable name, e.g. stdio or debugio
+         */
+        Name
     }
 }

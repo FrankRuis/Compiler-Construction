@@ -125,6 +125,18 @@ public class FrartellBaseListener implements FrartellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterPrintStat(@NotNull FrartellParser.PrintStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrintStat(@NotNull FrartellParser.PrintStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterArrayExpr(@NotNull FrartellParser.ArrayExprContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -21,6 +21,7 @@ stat
  | ID args SEMCOL                                   #funcCalltStat
  | RETURN expr SEMCOL                               #returnStat
  | block                                            #blockStat
+ | PRINT OPAR expr CPAR SEMCOL                      #printStat
  ;
 
 /** Expressions **/
@@ -100,6 +101,7 @@ STR:      'String';
 DEF:      'def';
 RETURN:   'return';
 PROGRAM:  'program';
+PRINT:    'print';
 
 /** Operators **/
 MINUS:    '-';

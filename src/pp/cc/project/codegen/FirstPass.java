@@ -386,6 +386,12 @@ public class FirstPass extends FrartellBaseListener {
     }
 
     @Override
+    public void exitPrintStat(@NotNull FrartellParser.PrintStatContext ctx) {
+        // Set the flowgraph entry
+        setEntry(ctx, getEntry(ctx.expr()));
+    }
+
+    @Override
     public void exitFuncCalltStat(@NotNull FrartellParser.FuncCalltStatContext ctx) {
         //TODO Function call
     }
