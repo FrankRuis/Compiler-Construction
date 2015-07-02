@@ -1,4 +1,4 @@
-package pp.cc.project.antlr;
+package pp.cc.project.tests.antlr;
 
 import static org.junit.Assert.fail;
 
@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 import org.junit.Test;
+import pp.cc.project.antlr.FrartellLexer;
 
 import java.io.*;
 import java.util.List;

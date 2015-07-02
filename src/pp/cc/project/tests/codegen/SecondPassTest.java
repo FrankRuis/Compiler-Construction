@@ -1,10 +1,13 @@
-package pp.cc.project.codegen;
+package pp.cc.project.tests.codegen;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 import pp.cc.project.Exceptions.ErrorListener;
 import pp.cc.project.Exceptions.ParseException;
 import pp.cc.project.Exceptions.RunException;
+import pp.cc.project.codegen.FirstPass;
+import pp.cc.project.codegen.FirstPassResult;
+import pp.cc.project.codegen.SecondPass;
 import pp.cc.project.dataobjects.Sprockell.*;
 import pp.cc.project.utils.FileUtils;
 import pp.cc.project.utils.ParseUtils;
@@ -92,7 +95,7 @@ public class SecondPassTest {
                     BufferedReader reader = RuntimeUtils.runSprockell(sprogram);
 
                     String line = null;
-                    while ((line = reader.readLine()) != null) {
+                    while (reader != null && (line = reader.readLine()) != null) {
                         System.out.printf("Output: %s%n", line);
 
                         // Make sure the output is as expected

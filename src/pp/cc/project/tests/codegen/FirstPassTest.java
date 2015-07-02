@@ -1,8 +1,9 @@
-package pp.cc.project.codegen;
+package pp.cc.project.tests.codegen;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 import pp.cc.project.Exceptions.ParseException;
+import pp.cc.project.codegen.FirstPass;
 import pp.cc.project.utils.FileUtils;
 import pp.cc.project.utils.ParseUtils;
 

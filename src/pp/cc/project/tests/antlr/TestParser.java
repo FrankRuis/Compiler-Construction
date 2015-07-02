@@ -1,4 +1,4 @@
-package pp.cc.project.antlr;
+package pp.cc.project.tests.antlr;
 
 import static org.junit.Assert.fail;
 

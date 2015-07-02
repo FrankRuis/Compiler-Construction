@@ -1,4 +1,4 @@
-package pp.cc.project.dataobjects;
+package pp.cc.project.tests.codegen;
 
 import static org.junit.Assert.assertEquals;
 
