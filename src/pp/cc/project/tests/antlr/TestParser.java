@@ -1,11 +1,6 @@
 package pp.cc.project.tests.antlr;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import junit.framework.TestCase;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.junit.Test;
 import pp.cc.project.Exceptions.ErrorListener;
 import pp.cc.project.Exceptions.ParseException;
 import pp.cc.project.utils.FileUtils;
@@ -62,11 +57,11 @@ public class TestParser extends TestCase {
                     ParseUtils.getParseTree(file.toFile(), errorListener);
                     errorListener.throwErrors();
                 } catch (ParseException e) {
-                    System.out.println("The following errors occurred: ");
+                    System.out.println("The following (expected) errors occurred: ");
                     e.getErrors().forEach(System.out::println);
 
                     // Make sure the right amount of errors occurred
-                    assertEquals(5, e.getErrors().size());
+                    assertEquals(7, e.getErrors().size());
 
                     // Expected
                     return;

@@ -16,3 +16,9 @@ else {
 
 // No closing of block
 if (True) { int x = 0;
+
+// No colon in ternary
+int x = (True) ? (2);
+
+// No parentheses in ternary
+int y = True ? 1 : 2;

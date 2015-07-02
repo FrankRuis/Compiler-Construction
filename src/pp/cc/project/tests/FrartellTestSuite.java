@@ -23,13 +23,13 @@ public class FrartellTestSuite {
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
 
+        suite.addTestSuite(TestScopes.class);
+        suite.addTestSuite(TestSprockellObjects.class);
+        suite.addTestSuite(TestFrartellTypes.class);
         suite.addTestSuite(TestLexer.class);
         suite.addTestSuite(TestParser.class);
         suite.addTestSuite(FirstPassTest.class);
         suite.addTestSuite(SecondPassTest.class);
-        suite.addTestSuite(TestScopes.class);
-        suite.addTestSuite(TestSprockellObjects.class);
-        suite.addTestSuite(TestFrartellTypes.class);
 
         return suite;
     }
