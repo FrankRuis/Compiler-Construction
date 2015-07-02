@@ -45,7 +45,7 @@ public class SecondPassTest {
                 try {
                     firstPassResult = new FirstPass().check(parseTree);
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    e.getErrors().forEach(System.err::println);
                 }
 
                 // Generate a sprockell program
@@ -54,12 +54,22 @@ public class SecondPassTest {
                 // Create a haskell file from the sprockell program
                 File sprogram = FileUtils.createSprockellFile(program);
 
+
                 // Compile the sprockell program and get the exit code
                 int exitCode = RuntimeUtils.compileSprockell(sprogram, true);
 
                 // Make sure the compilation was successful
                 if (exitCode != 0) {
                     fail("The compilation did not finish successfully.");
+                }
+
+
+                // Run the compiled program and get the exit code
+                exitCode = RuntimeUtils.runSprockell(sprogram, true);
+
+                // Make sure the program was executed successfully
+                if (exitCode != 0) {
+                    fail("The program did not execute successfully.");
                 }
             });
         } catch (IOException e) {
