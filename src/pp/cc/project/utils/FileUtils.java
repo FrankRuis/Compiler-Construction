@@ -45,7 +45,7 @@ public class FileUtils {
         Path path = FileSystems.getDefault().getPath(System.getProperty("user.dir"));
 
         // IntelliJ's working directory is in PPFinalProject, eclipse's working directory is in PPFinalProject/src
-        return Paths.get(path.toString(), path.endsWith("PPFinalProject") ? "src/" : "").toString();
+        return Paths.get(path.toString(), !path.endsWith("src") ? "src/" : "").toString();
     }
 
     /**

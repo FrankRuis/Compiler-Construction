@@ -52,4 +52,18 @@ public class ParseUtils {
         // Return the parse tree
         return parser.program();
     }
+
+    /**
+     * Parse the string file and return the parse tree
+     * @param s The string to parse
+     * @return The resulting parse tree
+     */
+    public static ParseTree getParseTree(String s) {
+        // Convert the file contents to a token stream
+        Lexer lexer = new FrartellLexer(new ANTLRInputStream(s));
+        FrartellParser parser = new FrartellParser(new CommonTokenStream(lexer));
+
+        // Return the parse tree
+        return parser.program();
+    }
 }

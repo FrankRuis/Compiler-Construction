@@ -48,6 +48,7 @@ public class SecondPassTest {
         expectedOutput.put("nestedIfWhileTest", "22");
         expectedOutput.put("swapTest", "21");
         expectedOutput.put("scopesTest", "0103");
+        expectedOutput.put("ternaryTest", "14");
     }
 
     @Test
