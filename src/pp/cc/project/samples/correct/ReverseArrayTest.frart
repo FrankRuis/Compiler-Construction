@@ -1,0 +1,12 @@
+program reverseArrayTest;
+
+int z[5] = [1, 2, 3, 4, 5];
+int length = 5;
+
+int i = 0;
+while (i < (length / 2)) {
+    int temp = z[i];
+    z[i] = z[length - i - 1];
+    z[length - i - 1] = temp;
+    i = i + 1;
+}
