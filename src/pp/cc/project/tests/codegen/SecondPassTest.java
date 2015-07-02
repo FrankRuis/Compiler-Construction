@@ -72,6 +72,7 @@ public class SecondPassTest {
                     firstPassResult = new FirstPass().check(parseTree);
                 } catch (ParseException e) {
                     e.getErrors().forEach(System.err::println);
+                    fail(String.format("%s did not pass the type checking phase.", file.getFileName()));
                 }
 
                 // Generate a sprockell program
