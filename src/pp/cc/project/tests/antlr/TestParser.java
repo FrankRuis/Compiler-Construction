@@ -48,29 +48,25 @@ public class TestParser extends TestCase {
     }
 
     public void testWrongFiles() {
+        // Test the file containing the parse problems
+        File file = new File(BASE_WRONG + "/WrongParseTest.frart");
+
+        // Get the parse tree
         try {
-            // Go through all files in the correct files folder
-            Files.walk(BASE_WRONG).filter(Files::isRegularFile).forEach(file -> {
-                // Get the parse tree
-                try {
-                    ErrorListener errorListener = new ErrorListener();
-                    ParseUtils.getParseTree(file.toFile(), errorListener);
-                    errorListener.throwErrors();
-                } catch (ParseException e) {
-                    System.out.println("The following (expected) errors occurred: ");
-                    e.getErrors().forEach(System.out::println);
+            ErrorListener errorListener = new ErrorListener();
+            ParseUtils.getParseTree(file, errorListener);
+            errorListener.throwErrors();
+        } catch (ParseException e) {
+            System.out.println("The following (expected) errors occurred: ");
+            e.getErrors().forEach(System.out::println);
 
-                    // Make sure the right amount of errors occurred
-                    assertEquals(7, e.getErrors().size());
+            // Make sure the right amount of errors occurred
+            assertEquals(7, e.getErrors().size());
 
-                    // Expected
-                    return;
-                }
-
-                fail(String.format("%s was parsed correctly but should have failed.", file.getFileName()));
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+            // Expected
+            return;
         }
+
+        fail(String.format("%s was parsed correctly but should have failed.", file.getName()));
     }
 }
