@@ -1,4 +1,4 @@
-package pp.cc.project.Exceptions;
+package pp.cc.project.utils.Exceptions;
 
 /**
  * @author Frank

@@ -1,15 +1,17 @@
 package pp.cc.project.tests.dataobjects.sprockell;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import pp.cc.project.dataobjects.sprockell.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Frank
  */
-public class TestSprockellObjects extends TestCase {
+public class TestSprockellObjects {
     /**
      * Test the toString() methods of the Sprockell objects
      */
+    @Test
     public void testSprockellObjects() {
         Constant constant = new Constant(-10);
         assertEquals("(-10)", constant.toString());

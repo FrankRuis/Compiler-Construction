@@ -2,7 +2,8 @@ package pp.cc.project.tests.codegen;
 
 import junit.framework.TestCase;
 import org.antlr.v4.runtime.tree.ParseTree;
-import pp.cc.project.Exceptions.ParseException;
+import org.junit.Test;
+import pp.cc.project.utils.Exceptions.ParseException;
 import pp.cc.project.codegen.FirstPass;
 import pp.cc.project.codegen.FirstPassResult;
 import pp.cc.project.dataobjects.type.Type;
@@ -11,12 +12,15 @@ import pp.cc.project.utils.ParseUtils;
 
 import java.io.File;
 
+import static org.junit.Assert.*;
+
 /**
  * @author Frank
  *
  * Test the type checking phase
  */
-public class FirstPassTest extends TestCase {
+public class FirstPassTest {
+    @Test
     public void testWrongTypes() {
         // The file to test
         File file = new File(FileUtils.getProjPath("samples/incorrect/WrongTypesTest.frart"));
@@ -44,6 +48,7 @@ public class FirstPassTest extends TestCase {
         fail(String.format("%s passed the type checking phase but shouldn't.", file.getName()));
     }
 
+    @Test
     public void testCorrectTypes() {
         // The file to test
         File file = new File(FileUtils.getProjPath("samples/correct/ScopesTest.frart"));

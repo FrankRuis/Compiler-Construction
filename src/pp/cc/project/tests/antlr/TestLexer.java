@@ -2,7 +2,6 @@ package pp.cc.project.tests.antlr;
 
 import static org.junit.Assert.fail;
 
-import junit.framework.TestCase;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Lexer;
@@ -18,7 +17,8 @@ import java.util.List;
  *
  * Test the lexer on several strings of possible tokens
  */
-public class TestLexer extends TestCase {
+public class TestLexer {
+    @Test
     public void testLexer() {
         try {
             assert (yields(scan("int x = 0;"), FrartellLexer.INT, FrartellLexer.ID,

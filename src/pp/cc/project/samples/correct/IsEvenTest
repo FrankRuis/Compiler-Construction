@@ -1,0 +1,5 @@
+program isEvenTest;
+
+int n = 12;
+bool isEven = n % 2 == 0;
+print(isEven);

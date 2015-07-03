@@ -1,4 +1,4 @@
-package pp.cc.project.Exceptions;
+package pp.cc.project.utils.Exceptions;
 
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;

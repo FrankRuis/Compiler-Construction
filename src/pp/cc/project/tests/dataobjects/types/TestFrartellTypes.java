@@ -1,15 +1,18 @@
 package pp.cc.project.tests.dataobjects.types;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import pp.cc.project.dataobjects.type.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Frank
  */
-public class TestFrartellTypes extends TestCase {
+public class TestFrartellTypes {
     /**
      * Test the size methods of the Frartell types
      */
+    @Test
     public void testFrartellTypes() {
         Type intType = Type.INT;
         assertEquals(4, intType.size());

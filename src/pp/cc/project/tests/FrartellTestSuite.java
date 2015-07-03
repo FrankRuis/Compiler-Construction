@@ -1,7 +1,7 @@
 package pp.cc.project.tests;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 import pp.cc.project.tests.antlr.TestLexer;
 import pp.cc.project.tests.antlr.TestParser;
 import pp.cc.project.tests.codegen.FirstPassTest;
@@ -15,27 +15,16 @@ import pp.cc.project.tests.dataobjects.types.TestFrartellTypes;
  *
  * Test suite for Frartell tests
  */
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+        TestSprockellObjects.class,
+        TestFrartellTypes.class,
+        TestScopes.class,
+        TestLexer.class,
+        TestParser.class,
+        FirstPassTest.class,
+        SecondPassTest.class
+})
 public class FrartellTestSuite {
-    /**
-     * Get a test suite containing all Frartell tests
-     * @return The test suite
-     */
-    public static TestSuite suite() {
-        TestSuite suite = new TestSuite();
-
-        suite.addTestSuite(TestScopes.class);
-        suite.addTestSuite(TestSprockellObjects.class);
-        suite.addTestSuite(TestFrartellTypes.class);
-        suite.addTestSuite(TestLexer.class);
-        suite.addTestSuite(TestParser.class);
-        suite.addTestSuite(FirstPassTest.class);
-        suite.addTestSuite(SecondPassTest.class);
-
-        return suite;
-    }
-
-    public static void main(String[] args) {
-        // Run the test suite
-        TestRunner.run(suite());
-    }
+    // Test suite should be runnable with the above annotations
 }

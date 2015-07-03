@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
 import pp.cc.project.antlr.FrartellLexer;
 import pp.cc.project.antlr.FrartellParser;
-import pp.cc.project.Exceptions.ErrorListener;
+import pp.cc.project.utils.Exceptions.ErrorListener;
 
 import java.io.File;
 
@@ -60,10 +60,14 @@ public class ParseUtils {
      * @param s The string to parse
      * @return The resulting parse tree
      */
-    public static ParseTree getParseTree(String s) {
+    public static ParseTree getParseTree(String s, ErrorListener errorListener) {
         // Convert the file contents to a token stream
         Lexer lexer = new FrartellLexer(new ANTLRInputStream(s));
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(errorListener);
         FrartellParser parser = new FrartellParser(new CommonTokenStream(lexer));
+        parser.removeErrorListeners();
+        parser.addErrorListener(errorListener);
 
         // Return the parse tree
         return parser.program();

@@ -2,7 +2,6 @@ package pp.cc.project.tests.codegen;
 
 import static org.junit.Assert.assertEquals;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 import pp.cc.project.codegen.Scopes;
 import pp.cc.project.dataobjects.type.*;
@@ -14,7 +13,8 @@ import pp.cc.project.dataobjects.type.*;
  * Check the assignment of types to variables,
  * and check overwriting variables from outer scopes in inner scopes.
  */
-public class TestScopes extends TestCase {
+public class TestScopes {
+    @Test
     public void testScopes() {
         Scopes scopes = new Scopes();
         assert(scopes.size() == 1);

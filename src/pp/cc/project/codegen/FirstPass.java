@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import pp.cc.project.antlr.FrartellBaseListener;
 import pp.cc.project.antlr.FrartellParser;
-import pp.cc.project.Exceptions.ParseException;
+import pp.cc.project.utils.Exceptions.ParseException;
 import pp.cc.project.dataobjects.type.ArrayType;
 import pp.cc.project.dataobjects.type.NoneType;
 import pp.cc.project.dataobjects.type.StringType;

@@ -1,8 +1,8 @@
 package pp.cc.project.tests.antlr;
 
-import junit.framework.TestCase;
-import pp.cc.project.Exceptions.ErrorListener;
-import pp.cc.project.Exceptions.ParseException;
+import org.junit.Test;
+import pp.cc.project.utils.Exceptions.ErrorListener;
+import pp.cc.project.utils.Exceptions.ParseException;
 import pp.cc.project.utils.FileUtils;
 import pp.cc.project.utils.ParseUtils;
 
@@ -11,12 +11,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.junit.Assert.*;
+
 /**
  * @author Frank
  *
  * Test the parser on correct and incorrect Frartell programs
  */
-public class TestParser extends TestCase {
+public class TestParser {
     private final Path BASE_CORRECT;
     private final Path BASE_WRONG;
 
@@ -28,6 +30,7 @@ public class TestParser extends TestCase {
         BASE_WRONG = Paths.get(FileUtils.getPath("pp/cc/project/samples/wrongparsing"));
     }
 
+    @Test
     public void testCorrectFiles() {
         try {
             // Go through all files in the correct files folder
@@ -47,7 +50,8 @@ public class TestParser extends TestCase {
         }
     }
 
-    public void testWrongFiles() {
+    @Test
+    public void testWrongFile() {
         // Test the file containing the parse problems
         File file = new File(BASE_WRONG + "/WrongParseTest.frart");
 
