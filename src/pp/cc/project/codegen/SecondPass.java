@@ -168,6 +168,9 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
             // Multiply the result of the expression by the size of an integer in bytes
             emit(Instr.Compute, operatorOf(Operator.Type.Mul), arrayRegister, register1, register1);
 
+            // Choose a different register if arrayRegister is the 0 register
+            arrayRegister = getReg(true, ctx.target());
+
             // Load the offset of the array to register 2
             emit(Instr.Const, offset, arrayRegister);
 

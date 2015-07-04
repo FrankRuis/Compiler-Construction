@@ -45,13 +45,11 @@ public class SecondPassTest {
 
         // Fill the expectedOutput map with the expected output for each program
         expectedOutput.put("reverseArrayTest", "54321");
-        expectedOutput.put("nestedIfWhileTest", "22");
         expectedOutput.put("swapTest", "21");
         expectedOutput.put("scopesTest", "0103");
         expectedOutput.put("ternaryTest", "14");
-        expectedOutput.put("whileTest", "535");
-        expectedOutput.put("compoundTest", "7205040");
         expectedOutput.put("isEvenTest", "1");
+        expectedOutput.put("numPrimes", "1229");
     }
 
     @Test
@@ -96,7 +94,7 @@ public class SecondPassTest {
 
                 // Run the compiled program and check the output if there is any
                 try {
-                    BufferedReader reader = RuntimeUtils.runSprockell(sprogram, 5);
+                    BufferedReader reader = RuntimeUtils.runSprockell(sprogram, 15);
 
                     String line = null;
                     while (reader != null && (line = reader.readLine()) != null) {
@@ -217,7 +215,8 @@ public class SecondPassTest {
 
         // Run the compiled program and check the output if there is any
         try {
-            BufferedReader reader = RuntimeUtils.runSprockell(sprogram, 5);
+            // Time out the infinite loop after 10 seconds
+            BufferedReader reader = RuntimeUtils.runSprockell(sprogram, 10);
 
             String line;
             while (reader != null && (line = reader.readLine()) != null) {
