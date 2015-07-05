@@ -1,22 +1,31 @@
 // Test assignments to the wrong type and wrong expression types in statements
 program wrongTypes;
 
-int x;
-bool y;
-int z[3] = [True, False];
+int  intVar;
+int  intVar2;
+bool boolVar;
+int  intArray[3] = [1, 2];     // Test wrong size
+int  intArray2[2] = [True, 3]; // Test wrong element type
+int  intArray4[2] = [1, 2];
+int  intArray5[3] = [1, 2, 3];
 
-x = y;
-y = z;
-y = z[2];
-z = x;
+intVar    = boolVar;
+boolVar   = intArray;
+boolVar   = intArray[2];
+intArray  = intVar;
+intArray4 = intArray5;
 
-x = False;
-y = 7;
-z = 9;
+intVar   = False;
+boolVar  = 7;
+intArray = 9;
 
-int a = (x) ? (6) : (4);
-bool b = (True) ? (5) : (6);
-int c = (True) ? (1) : (1 == 1);
+int  a = (intVar) ? (6) : (4);
+bool b = (True)   ? (5) : (6);
+int  c = (True)   ? (1) : (1 == 1);
+
+int intVar = 5;   // Has already been declared
+intVar = intVar2; // intVar2 has never been initialized
+intVar = intVar3; // intVar3 has never been declared
 
 while (1 + 3) {
 

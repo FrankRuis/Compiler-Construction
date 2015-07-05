@@ -39,7 +39,7 @@ public class FirstPassTest {
             e.getErrors().forEach(System.out::println);
 
             // Make sure the right amount of errors occurred
-            assertEquals(14, e.getErrors().size());
+            assertEquals(21, e.getErrors().size());
 
             // Exception expected, skip the fail
             return;

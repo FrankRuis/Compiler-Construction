@@ -22,3 +22,19 @@ int x = (True) ? (2);
 
 // No parentheses in ternary
 int y = True ? 1 : 2;
+
+// double else isn't allowed
+if (false) {
+
+} else {
+
+} else {
+
+}
+
+// else if isn't allowed
+if (false) {
+
+} else if (true) {
+
+}

@@ -20,14 +20,14 @@ import static org.junit.Assert.*;
  */
 public class TestParser {
     private final Path BASE_CORRECT;
-    private final Path BASE_WRONG;
+    private final Path BASE_INCORRECT;
 
     /**
      * Constructor, set the paths to the folders with correct and incorrect programs
      */
     public TestParser() {
         BASE_CORRECT = Paths.get(FileUtils.getPath("pp/cc/project/samples/correct"));
-        BASE_WRONG = Paths.get(FileUtils.getPath("pp/cc/project/samples/wrongparsing"));
+        BASE_INCORRECT = Paths.get(FileUtils.getPath("pp/cc/project/samples/wrongparsing"));
     }
 
     @Test
@@ -51,9 +51,9 @@ public class TestParser {
     }
 
     @Test
-    public void testWrongFile() {
+    public void testIncorrectFile() {
         // Test the file containing the parse problems
-        File file = new File(BASE_WRONG + "/WrongParseTest.frart");
+        File file = new File(BASE_INCORRECT + "/WrongParseTest.frart");
 
         // Get the parse tree
         try {
@@ -65,7 +65,7 @@ public class TestParser {
             e.getErrors().forEach(System.out::println);
 
             // Make sure the right amount of errors occurred
-            assertEquals(7, e.getErrors().size());
+            assertEquals(9, e.getErrors().size());
 
             // Expected
             return;
@@ -73,4 +73,6 @@ public class TestParser {
 
         fail(String.format("%s was parsed correctly but should have failed.", file.getName()));
     }
+
+
 }

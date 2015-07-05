@@ -476,7 +476,7 @@ public class FirstPass extends FrartellBaseListener {
      */
     private void setEntry(ParseTree node, ParserRuleContext entry) {
         if (entry == null) {
-            throw new IllegalArgumentException("Null flow graph entry.");
+            errors.add(String.format("Null flow graph entry at %s", node.getText()));
         }
         this.result.setEntry(node, entry);
     }
