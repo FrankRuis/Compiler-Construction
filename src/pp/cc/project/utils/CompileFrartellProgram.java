@@ -11,6 +11,8 @@ import java.io.File;
 
 /**
  * @author Frank
+ *
+ * Example class to show how to use the compiler
  */
 public class CompileFrartellProgram {
     public static void main(String[] args) {
