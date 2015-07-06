@@ -1,8 +1,8 @@
 package pp.cc.project.tests.codegen;
 
-import junit.framework.TestCase;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
+import pp.cc.project.utils.Exceptions.ErrorListener;
 import pp.cc.project.utils.Exceptions.ParseException;
 import pp.cc.project.codegen.FirstPass;
 import pp.cc.project.codegen.FirstPassResult;
@@ -11,6 +11,9 @@ import pp.cc.project.utils.FileUtils;
 import pp.cc.project.utils.ParseUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
 
@@ -92,5 +95,34 @@ public class FirstPassTest {
             e.getErrors().forEach(System.err::println);
             fail(String.format("%s did not pass the type checking phase", file.getName()));
         }
+    }
+
+    @Test
+    public void testAllCorrectFiles() {
+        try {
+        // Go through all files in the correct files folder
+        Files.walk(Paths.get(FileUtils.getProjPath("samples/correct/"))).filter(Files::isRegularFile).forEach(file -> {
+            // Get the parse tree
+            ParseTree parseTree = null;
+            try {
+                ErrorListener errorListener = new ErrorListener();
+                parseTree = ParseUtils.getParseTree(file.toFile(), errorListener);
+                errorListener.throwErrors();
+            } catch (ParseException e) {
+                e.getErrors().forEach(System.err::println);
+                fail(String.format("%s was not parsed correctly.", file.getFileName()));
+            }
+
+            // Get the result of the type checking phase
+            try {
+                new FirstPass().check(parseTree);
+            } catch (ParseException e) {
+                e.getErrors().forEach(System.err::println);
+                fail(String.format("%s did not pass the type checking phase.", file.getFileName()));
+            }
+        });
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
     }
 }
