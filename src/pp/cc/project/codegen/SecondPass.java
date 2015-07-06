@@ -452,6 +452,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
                 emit(Instr.Compute, operatorOf(Operator.Type.Add), register0, register1, register2);
                 break;
             default:
+                // We can't do anything to recover from this, so throw an unchecked exception
                 throw new RuntimeException(String.format("Unknown operator in add expression: %s", ctx.op.getText()));
         }
 
@@ -497,6 +498,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
                 emit(Instr.Compute, operatorOf(Operator.Type.Div), register0, register1, register2);
                 break;
             default:
+                // We can't do anything to recover from this, so throw an unchecked exception
                 throw new RuntimeException(String.format("Unknown operator in add expression: %s", ctx.op.getText()));
         }
 
@@ -572,6 +574,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
                 emit(Instr.Compute, operatorOf(Operator.Type.Or), register0, register1, register2);
                 break;
             default:
+                // We can't do anything to recover from this, so throw an unchecked exception
                 throw new RuntimeException(String.format("Unknown operator in boolean expression: %s", ctx.op.getText()));
         }
 
@@ -620,7 +623,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
                 emit(Instr.Compute, operatorOf(Operator.Type.GtE), register0, register1, register2);
                 break;
             default:
-                // Throw a runtime exception since this is not something we can recover from
+                // We can't do anything to recover from this, so throw an unchecked exception
                 throw new RuntimeException(String.format("Unknown operator in boolean expression: %s", ctx.op.getText()));
         }
 
@@ -663,7 +666,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
                 emit(Instr.Compute, operatorOf(Operator.Type.NEq), register0, register1, register2);
                 break;
             default:
-                // Throw a runtime exception since this is not something we can recover from
+                // We can't do anything to recover from this, so throw an unchecked exception
                 throw new RuntimeException(String.format("Unknown operator in boolean expression: %s", ctx.op.getText()));
         }
 
@@ -821,7 +824,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
             // Throw an exception if there are no registers available
             if (reg == null) {
-                // Throw a runtime exception since this is not something we can recover from
+                // We can't do anything to recover from this, so throw an unchecked exception
                 throw new RuntimeException("Ran out of available registers.");
             }
 
@@ -851,7 +854,7 @@ public class SecondPass extends FrartellBaseVisitor<Instruction> {
 
             // Throw an exception if there are no registers available
             if (reg == null) {
-                // Throw a runtime exception since this is not something we can recover from
+                // We can't do anything to recover from this, so throw an unchecked exception
                 throw new RuntimeException("Ran out of available registers.");
             }
 

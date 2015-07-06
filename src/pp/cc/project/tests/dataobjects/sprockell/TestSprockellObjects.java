@@ -46,5 +46,15 @@ public class TestSprockellObjects {
         instruction = new Instruction(Instr.Compute, operator, register, new Register(Register.Reg.RegA),
                 new Register(Register.Reg.RegE));
         assertEquals("Compute Add RegB RegA RegE", instruction.toString());
+
+        Program program = new Program();
+        program.add(instruction);
+        program.setName("testName");
+        assertEquals("import Sprockell.System\n" +
+                "\n" +
+                "testName = [ Compute Add RegB RegA RegE\n" +
+                "\t\t]\n" +
+                "\n" +
+                "main = run 1 testName", program.toString());
     }
 }
